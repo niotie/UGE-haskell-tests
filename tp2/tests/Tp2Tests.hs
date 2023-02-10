@@ -101,9 +101,9 @@ palindromePTests = testGroup "Unit tests for reverse'"
 pairsTest = testGroup "Tests for pairs"
     [ testGroup "Unit tests for pairs"
         [ testCase "pairs [] == []" $
-            pairs ([] :: [Int]) @?= ([] :: [Int])
+            pairs ([] :: [Int]) @?= ([] :: [(Int, Int)])
         , testCase "pairs [1] == []" $
-            pairs [1] @?= ([] :: [Int])
+            pairs [1] @?= ([] :: [(Int, Int)])
         , testCase "pairs [1, 2, 3] == [(1, 2), (2, 3)]" $
             pairs [1, 2, 3] @?= [(1, 2), (2, 3)]
         ]
@@ -121,7 +121,7 @@ factorsTest = testGroup "Tests for factors"
     -- FIXME: not testing for distinctness, no empty factor
     [ testGroup "Unit tests for factors"
         [ testCase "factors [] == []" $
-            factors ([] :: [Int]) @?= ([] :: [Int])
+            factors ([] :: [Int]) @?= ([] :: [[Int]])
         , testCase "factors [1] (up to order)" $
             sort (factors [1]) @?= [[1]]
         , testCase "factors [1, 2, 3, 4] (up to order)" $
