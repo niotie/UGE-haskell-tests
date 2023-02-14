@@ -8,11 +8,13 @@ import Test.SmallCheck.Series as SCS
 
 import Tp3
 import Data.List
+import Math.Combinatorics.Exact.Binomial as B (choose)
+import qualified Test.SmallCheck.Series as SC
 
 tests = testGroup "Tests for TP 3"
     [ ex1Tests
-    -- , ex2Tests
-    -- , ex3Tests
+    , ex2Tests
+    , ex3Tests
     -- , ex4Tests
     -- , ex5Tests
     ]
@@ -130,4 +132,92 @@ reverseTests reversex reversexname = testGroup ("Tests for " ++ reversexname)
         (reversexname ++ 
             " behaves like reverse on Int lists (QuickCheck)") $
         \l -> reversex (l :: [Int]) === reverse l
-    ] 
+    ]
+
+ex2Tests = testGroup "Tests for exercise 2"
+    [ fibonacciSeqTests fibonacciSeq2 "fibonacciSeq2"
+    , fibonacciSeqTests fibonacciSeq3 "fibonacciSeq3"
+    ]
+
+fibonacciSeqTests fibonacciSeqx fibonacciSeqxname = testGroup 
+    ("Tests for " ++ fibonacciSeqxname)
+    [ testCase ("take 10 $ " ++ fibonacciSeqxname ++ " == [0,1,1,2,3,5,8,13,21,34]") $
+        take 10 fibonacciSeqx @?= [0,1,1,2,3,5,8,13,21,34]
+    , testCase ("sum (take 100 $ " ++ fibonacciSeqxname ++ ") == 573147844013817084100") $
+        sum (take 100 fibonacciSeqx) @?= 573147844013817084100
+    ]
+
+ex3Tests = testGroup "Tests for exercise 2"
+    [ distribTests
+    , permutationsTests permutations1 "permutations1"
+    , shufflesTests
+    , permutationsTests permutations2 "permutations2"
+    , permutationsTests permutations3 "permutations3"
+    ]
+
+distribTests = testGroup "Tests for distrib"
+    [ SC.testProperty
+        "all elements of distrib 0 [2..n] are distinct (SmallCheck)" $
+        \(SC.Positive n) -> nub (distrib 0 [1..(n::Int)]) == (distrib 0 [1..n] :: [[Int]])
+    , QC.testProperty 
+        "all elements of distrib 0 [1..n] are distinct (SmallCheck)" $
+        \(QC.NonNegative n) -> nub (distrib 0 [1..(n::Int)]) === (distrib 0 [1..n] :: [[Int]])
+    , SC.testProperty
+        "deleting 0 from distrib 0 [1..n] yields n copies of [1..n] (SmallCheck)" $
+        \(SC.NonNegative n) -> map (delete 0) (distrib 0 [1..(n::Int)]) == replicate (n + 1) [1..n]
+    , QC.testProperty 
+        "deleting 0 from distrib 0 [1..n] yields n copies of [1..n] (SmallCheck)" $
+        \(QC.NonNegative n) -> map (delete 0) (distrib 0 [1..(n::Int)]) === replicate (n + 1) [1..n]
+    ]
+
+shufflesTests = testGroup "Tests for shuffles"
+    [ SC.testProperty
+        "elements of l retain their order in shuffles l l' (SmallCheck)" $
+        SC.changeDepth (min 4) $
+        \l l' -> all (isSubsequenceOf l) (shuffles (l :: [Int]) (l' :: [Int]) :: [[Int]])
+    , QC.testProperty 
+        "elements of l retain their order in shuffles l l' (QuickCheck)" $
+        QC.mapSize (min 4) $
+        \l l' -> all (isSubsequenceOf l) (shuffles (l :: [Int]) (l' :: [Int]) :: [[Int]])
+    , SC.testProperty
+        "elements of l' retain their order in shuffles l l' (SmallCheck)" $
+        SC.changeDepth (min 3) $
+        \l l' -> all (isSubsequenceOf l') (shuffles (l :: [Int]) (l' :: [Int]) :: [[Int]])
+    , QC.testProperty 
+        "elements of l' retain their order in shuffles l l'  (QuickCheck)" $
+        QC.mapSize (min 4) $
+        \l l' -> all (isSubsequenceOf l') (shuffles (l :: [Int]) (l' :: [Int]) :: [[Int]])
+    , SC.testProperty
+        "all elements of shuffles [1..n] [n+1..n+m] are distinct (SmallCheck)" $
+        \(SC.NonNegative n) (SC.NonNegative m) -> 
+            let res = shuffles [1..(n::Int)] [n+1..n+m] in
+                nub (res :: [[Int]]) == res
+    , QC.testProperty 
+        "all elements of shuffles [1..n] [n+1..n+m] are distinct  (QuickCheck)" $
+        QC.mapSize (min 6) $
+        \(QC.NonNegative n) (QC.NonNegative m) -> 
+            let res = shuffles [1..(n::Int)] [n+1..n+m] in
+                nub (res :: [[Int]]) === res    
+    , SC.testProperty
+        "all in shuffles l l' contain the same ets as l ++ l' (SmallCheck)" $
+        SC.changeDepth (min 4) $
+        \l l' -> map sort (shuffles (l :: [Int]) (l' :: [Int])) 
+            == replicate (n l l') (sort (l ++ l'))
+    , QC.testProperty 
+        "all in shuffles l l' contain the same ets as l ++ l' (SmallCheck)" $
+        QC.mapSize (min 4) $
+        \l l' -> map sort (shuffles (l :: [Int]) (l' :: [Int])) 
+            === replicate (n l l') (sort (l ++ l'))
+    ] where n l l' = length (l ++ l') `B.choose` length l'
+
+permutationsTests f fname = testGroup 
+    ("Tests for " ++ fname)
+    [ SC.testProperty
+        (fname ++ " behaves like permutations on Int lists, up to sorting (SmallCheck)") $
+        \l -> sort (f (l :: [Int])) == sort (permutations l)
+    , QC.testProperty 
+        (fname ++ " behaves like permutations on Int lists, up to sorting (QuickCheck)") $
+        QC.mapSize (min 7) $
+        \l -> sort (f (l :: [Int])) === sort (permutations l)
+    ]
+
