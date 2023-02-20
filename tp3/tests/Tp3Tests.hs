@@ -8,14 +8,16 @@ import Test.SmallCheck.Series as SCS
 
 import Tp3
 import Data.List
+    ( delete, isSubsequenceOf, nub, permutations, sort )
 import Math.Combinatorics.Exact.Binomial as B (choose)
 import qualified Test.SmallCheck.Series as SC
+import Data.Char (digitToInt)
 
 tests = testGroup "Tests for TP 3"
     [ ex1Tests
     , ex2Tests
     , ex3Tests
-    -- , ex4Tests
+    , ex4Tests
     -- , ex5Tests
     ]
 
@@ -147,7 +149,7 @@ fibonacciSeqTests fibonacciSeqx fibonacciSeqxname = testGroup
         sum (take 100 fibonacciSeqx) @?= 573147844013817084100
     ]
 
-ex3Tests = testGroup "Tests for exercise 2"
+ex3Tests = testGroup "Tests for exercise 3"
     [ distribTests
     , permutationsTests permutations1 "permutations1"
     , shufflesTests
@@ -221,3 +223,48 @@ permutationsTests f fname = testGroup
         \l -> sort (f (l :: [Int])) === sort (permutations l)
     ]
 
+ex4Tests = testGroup "Tests for exercise 4"
+    [ mapTests map' "map'"
+    , iterate'Tests (+ 1) "(+ 1)"
+    , iterate'Tests (* (-2)) "(* (-2))"
+    , altMapTests
+    , digitsTests
+    , luhnTests
+    ]
+
+iterate'Tests f fname = testGroup ("Tests for iterate' " ++ fname)
+    [ SC.testProperty
+        ("iterate' " ++ fname ++ " behaves like iterate (SmallCheck)") $
+        \n -> take 100 (iterate' f (n::Int)) == take 100 (iterate f n)
+    , QC.testProperty 
+        ("iterate' " ++ fname ++ " behaves like iterate (QuickCheck)") $
+        \n -> take 100 (iterate' f n) === take 100 (iterate f n)
+    ]
+
+altMapTests = testGroup "Tests for altMap"
+    [ testCase "altMap (+10) (*100) [1,2,3,4,5]" $
+        altMap (+10) (*100) [1,2,3,4,5] @=? [11,200,13,400,15]
+    , testCase "altMap (+10) id [1,2,3,4,5]" $
+        altMap (+10) id [1,2,3,4,5] @=? [11,2,13,4,15]
+    , testCase "altMap id (*100) [1,2,3,4,5]" $
+        altMap id (*100) [1,2,3,4,5] @=? [1,200,3,400,5]
+    , testCase "altMap id id [1,2,3,4,5]" $
+        altMap id id [1,2,3,4,5] @=? [1,2,3,4,5]
+    ]
+
+digitsTests = testGroup "Tests for digits"
+    [ SC.testProperty
+        "digits of various numbers (SmallCheck)" $
+        \(SC.NonNegative n) -> digits (n::Int) == map digitToInt (show n)
+    , QC.testProperty 
+        "digits of various numbers (QuickCheck)" $
+        \(QC.NonNegative n) -> digits (n::Int) === map digitToInt (show n)
+    ]
+
+luhnTests = testGroup 
+    "Tests for luhn"
+    [ testCase "[4,6,2,4, 7,4,8,2, 3,3,2,4, 9,0,8,0] is not valid" $
+        luhn [4,6,2,4, 7,4,8,2, 3,3,2,4, 9,0,8,0] @=? False
+    , testCase "[4,6,2,4, 7,4,8,2, 3,3,2,4, 9,0,8,0] is valid" $
+        luhn [4,6,2,4, 7,4,8,2, 3,3,2,4, 9,7,8,0] @=? True
+    ]
