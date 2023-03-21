@@ -128,3 +128,12 @@ mTreeToList' = undefined
 subsets = undefined
 
 permutedSubsets = undefined
+
+mTrees = undefined
+
+
+-- Exercice 5 - Compléments
+
+mTreeIsoTopology = undefined
+
+mTreeCut = undefined
