@@ -102,7 +102,7 @@ mTreeBreadthFirstTraversalTests = testGroup
 mTreeLayerTests = testGroup
     "Tests for mTreeLayer"
     [ testCase "mTreeLayer 0 mTreeExample" $
-        mTreeLayer 0 mTreeExample @?= ([]::[Int])
+        mTreeLayer 0 mTreeExample @?= ([]::[Integer])
     , testCase "mTreeLayer 1 mTreeExample" $
         mTreeLayer 1 mTreeExample @?= [6]
     , testCase "mTreeLayer 2 mTreeExample" $
@@ -112,7 +112,7 @@ mTreeLayerTests = testGroup
     , testCase "mTreeLayer 4 mTreeExample" $
         mTreeLayer 4 mTreeExample @?= [1,7,3,3,9,1,8,1,2,9,7,3]
     , testCase "mTreeLayer 5 mTreeExample" $
-        mTreeLayer 5 mTreeExample @?= ([]::[Int])
+        mTreeLayer 5 mTreeExample @?= ([]::[Integer])
     ]
 
 ex3Tests = testGroup "Tests for exercise 3 -- Fonctions d'ordre supérieur"
@@ -219,7 +219,7 @@ ex4Tests = testGroup "Tests for exercise 4 -- Générations"
 subsetsTests = testGroup
     "Tests for subsets"
     [ testCase "subsets []" $
-        subsets ([]::[Int]) @?= ([[]]::[[Int]])
+        subsets ([]::[Integer]) @?= ([[]]::[[Integer]])
     , testCase "subsets [1, 2, 3]" $
         sort (subsets [1, 2, 3]) @?= sort (subsequences [1, 2, 3])
     , testCase "subsets ['a', 'b', 'c', 'd']" $
@@ -230,7 +230,7 @@ subsetsTests = testGroup
 permutedSubsetsTests = testGroup
     "Tests for permutedSubsets"
     [ testCase "permutedSubsets []" $
-        permutedSubsets ([]::[Int]) @?= ([[]]::[[Int]])
+        permutedSubsets ([]::[Integer]) @?= ([[]]::[[Integer]])
     , testCase "permutedSubsets [1, 2]" $
         sort (permutedSubsets [1, 2]) @?=
             sort [[],[2],[1],[1,2],[2,1]]
@@ -245,7 +245,7 @@ permutedSubsetsTests = testGroup
 mTreesTests = testGroup
     "Tests for mTrees"
     [ testCase "mTrees []" $
-        mTrees ([]::[Int]) @?= ([]::[Int])
+        mTrees ([]::[Integer]) @?= ([]::[Integer])
     , testCase "mTrees [1, 2]" $
         sort (mTrees [1, 2]) @?= sort [MTree 1 [MTree 2 []],
                                        MTree 2 [MTree 1 []]]
