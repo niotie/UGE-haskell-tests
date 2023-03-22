@@ -245,7 +245,7 @@ permutedSubsetsTests = testGroup
 mTreesTests = testGroup
     "Tests for mTrees"
     [ testCase "mTrees []" $
-        mTrees ([]::[Integer]) @?= ([]::[Integer])
+        mTrees ([]::[Integer]) @?= ([]::[MTree Integer])
     , testCase "mTrees [1, 2]" $
         sort (mTrees [1, 2]) @?= sort [MTree 1 [MTree 2 []],
                                        MTree 2 [MTree 1 []]]
