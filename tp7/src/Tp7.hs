@@ -30,4 +30,44 @@ instance Show AExpr where
                         
 instance Show VAExpr where
   show (VAExpr (e,v)) = show e ++ " = " ++ show v
-  
+
+
+-- Exercice 1 -- Échauffement
+
+sublists = undefined
+
+legal1 = undefined
+
+apply = undefined
+
+value = undefined
+
+
+-- Exercice 2 -- Un premier solveur
+
+merge = undefined
+
+unmerges1 = undefined
+
+combineVAExprs1 = undefined
+
+mkAExpres1 = undefined
+
+searchBest = undefined
+
+countdown1 = undefined
+
+
+-- Exercice 3 -- Un solveur vitaminé
+
+legal2 = undefined
+
+combineVAExprs2 :: VAExpr -> VAExpr -> [VAExpr]
+combineVAExprs2 (VAExpr (e1,v1)) (VAExpr (e2,v2))
+    | v1 < v2 = combineVAExprsUnbalance2 (VAExpr (e1,v1)) (VAExpr (e2,v2))
+    | v1 == v2 = combineVAExprsBalance2 (VAExpr (e1,v1)) (VAExpr (e2,v2))
+    | otherwise = combineVAExprsUnbalance2 (VAExpr (e2,v2)) (VAExpr (e1,v1))
+
+combineVAExprsBalance2 = undefined
+
+combineVAExprsUnbalance2 = undefined
