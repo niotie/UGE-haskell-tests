@@ -1,0 +1,7 @@
+cradle:
+  cabal:
+    - path: "src"
+      component: "lib:Tp8"
+
+    - path: "tests"
+      component: "tp8:test"
