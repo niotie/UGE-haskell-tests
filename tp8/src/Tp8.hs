@@ -17,10 +17,10 @@ newtype Vehicle = Vehicle (Cell,Cell) deriving (Show,Eq)
 newtype Grid = Grid { vehicles :: [Vehicle] } deriving (Show,Eq)
 
 -- move vehicle to some adjacent cell (one cell distance)
-newtype Move = Move (VehicleI, Cell) deriving (Show)
+newtype Move = Move (VehicleI, Cell) deriving (Show,Eq)
 
 -- a path is a sequence of moves together with the resulting grid
-newtype Path = Path ([Move], Grid) deriving (Show)
+newtype Path = Path ([Move], Grid) deriving (Show,Eq)
 
 -- a frontier is a list of paths  (waiting to to be explored further)
 newtype Frontier = Frontier [Path]
@@ -202,14 +202,20 @@ move = undefined
 
 -- Exercice 3
 
+isSolved :: Grid -> Bool
 isSolved = undefined
 
+succPaths :: Path -> [Path]
 succPaths = undefined
 
+bfsSearch :: [Grid] -> Frontier -> Maybe [Move]
 bfsSearch = undefined
 
+bfsSolve :: Grid -> Maybe [Move]
 bfsSolve = undefined
 
+dfsSearch :: [Grid] -> Frontier -> Maybe [Move]
 dfsSearch = undefined
 
-dfsolve = undefined
+dfsSolve :: Grid -> Maybe [Move]
+dfsSolve = undefined
