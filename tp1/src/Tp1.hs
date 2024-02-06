@@ -1,6 +1,6 @@
 module Tp1 where
 
-myAverage :: Int -> Int -> Int -> Float
+myAverage :: Float -> Float -> Float -> Float
 myAverage = undefined
 
 myMin2 :: Int -> Int -> Int
@@ -26,3 +26,12 @@ myFact = undefined
 
 myGCDEuclid :: Int -> Int -> Int
 myGCDEuclid = undefined
+
+myGCDEuclidean :: Int -> Int -> Int
+myGCDEuclidean = undefined
+
+myAverage2 :: Float -> Float -> Float -> Float
+myAverage2 = undefined
+
+detectZero :: (Int -> Int) -> Int -> Int
+detectZero = undefined

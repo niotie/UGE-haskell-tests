@@ -1,5 +1,7 @@
 module Tp1Tests where
 
+import Test.SmallCheck.Series as SCS
+
 import Test.Tasty
 import Test.Tasty.HUnit
 import Test.Tasty.QuickCheck as QC
@@ -19,15 +21,18 @@ tests = testGroup "Tests for exercise 4"
     , myMulTests
     , myFactTests -- (e) et (f)
     , myGCDEuclidTests
+    , myGCDEuclideanTests
+    , myAverage2Tests
+    , detectZeroTests
     ]
 
 myAverageTests = testGroup "Unit tests for myAverage"
-    [ testCase "myAverage 1 1 1" $
-        myAverage 1 1 1    @?= 1
+    [ testCase "myAverage 1.2 1.0 1.4" $
+        myAverage 1.2 1.0 1.4    @?= 1.2
     , testCase "myAverage -1 1 1" $
         myAverage (-1) 1 1 @?= 1/3
     , testCase "myAverage 1 2 3" $
-        myAverage 1 2 3    @?= 2
+        myAverage 1 2 6    @?= 3
     ]
 
 myMin2Tests = testGroup "Property tests for myMin2"
@@ -84,8 +89,31 @@ myFactTests = testGroup "Unit tests for myFact"
     ]
 
 myGCDEuclidTests = testGroup "Property tests for myGCDEuclid"
-    [ SC.testProperty "myGCDEuclid equals gcd (SmallCheck)" $
-        \a b -> myGCDEuclid a b == gcd a b
-    , QC.testProperty "myGCDEuclid equals gcd (QuickCheck)" $
-        \a b -> myGCDEuclid a b == gcd a b
+    [ SC.testProperty "myGCDEuclid equals gcd on Ints (SmallCheck)" $
+        \(SCS.NonNegative a) (SCS.NonNegative b) -> myGCDEuclid (a :: Int) (b :: Int) == gcd a b
+    , QC.testProperty "myGCDEuclid equals gcd on Ints (QuickCheck)" $
+        \(QC.NonNegative a) (QC.NonNegative b) -> myGCDEuclid (a :: Int) (b :: Int) == gcd a b
+    ]
+
+myGCDEuclideanTests = testGroup "Property tests for myGCDEuclidean"
+    [ SC.testProperty "myGCDEuclidean equals gcd (SmallCheck)" $
+        \a b -> myGCDEuclidean a b == gcd a b
+    , QC.testProperty "myGCDEuclidean equals gcd (QuickCheck)" $
+        \a b -> myGCDEuclidean a b == gcd a b
+    ]
+
+myAverage2Tests = testGroup "Unit tests for myAverage2"
+    [ testCase "myAverage2 1 1 1" $
+        myAverage2 1 1 1    @?= 1
+    , testCase "myAverage2 -1 1 1" $
+        myAverage2 (-1) 1 1 @?= 1/3
+    , testCase "myAverage2 1 2 3" $
+        myAverage2 1 2 6    @?= 3
+    ]
+
+detectZeroTests = testGroup "Unit tests for detectZero"
+    [ testCase "detectZero (\\x -> if x > 10 then 0 else x) 1" $
+        detectZero (\x -> if x > 10 then 0 else x) 1 @?= 11
+    , testCase "detectZero (`mod` 7) 1" $
+        detectZero (`mod` 7) 1    @?= 7
     ]

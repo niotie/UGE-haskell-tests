@@ -39,6 +39,7 @@ test-suite test
     Tp1Tests
   build-depends:
       base >= 4 && < 5
+    , smallcheck
     , tasty >= 0.7
     , tasty-hunit
     , tasty-quickcheck
