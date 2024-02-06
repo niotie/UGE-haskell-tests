@@ -30,7 +30,7 @@ myGCDEuclid = undefined
 myGCDEuclidean :: Int -> Int -> Int
 myGCDEuclidean = undefined
 
-myAverage2 :: Float -> Float -> Float -> Float
+myAverage2 :: Int -> Int -> Int -> Float
 myAverage2 = undefined
 
 detectZero :: (Int -> Int) -> Int -> Int
