@@ -19,3 +19,5 @@ Une fois le travail réalisé, se placer dans un des répertoires de tp (`tp1`,
 
 - `cabal test` pour lancer l'ensemble des tests définis dans le sous-répertoire
   `tests` et inscrire leur résultat dans un fichier de log.
+
+En cas de problème avec l'une des commandes précédentes, il peut être nécessaire de lancer `cabal update`.
