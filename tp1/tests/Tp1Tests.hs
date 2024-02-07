@@ -65,16 +65,16 @@ myMax3Tests = testGroup "Property tests for myMax3"
 
 myAddTests = testGroup "Property tests for myAdd"
     [ SC.testProperty "myAdd equals (+) (SmallCheck)" $
-        \a b -> myAdd a b == a + b
+        \a (SCS.NonNegative b) -> myAdd a b == a + b
     , QC.testProperty "myAdd equals (+) (QuickCheck)" $
-        \a b -> myAdd a b == a + b
+        \a (QC.NonNegative b) -> myAdd a b == a + b
     ]
 
 myMulTests = testGroup "Property tests for myMul"
     [ SC.testProperty "myMul equals (*) (SmallCheck)" $
-        \a b -> myMul a b == a * b
+        \a (SCS.NonNegative b) -> myMul a b == a * b
     , QC.testProperty "myMul equals (*) (QuickCheck)" $
-        \a b -> myMul a b == a * b
+        \a (QC.NonNegative b) -> myMul a b == a * b
     ]
 
 myFactTests = testGroup "Unit tests for myFact"
