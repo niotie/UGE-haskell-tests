@@ -28,7 +28,7 @@ tests = testGroup "Tests for exercise 4"
 
 myAverageTests = testGroup "Unit tests for myAverage"
     [ testCase "myAverage 1.2 1.0 1.4" $
-        myAverage 1.2 1.0 1.4    @?= 1.2
+        myAverage 1.25 1.0 1.5    @?= 1.25
     , testCase "myAverage -1 1 1" $
         myAverage (-1) 1 1 @?= 1/3
     , testCase "myAverage 1 2 3" $
