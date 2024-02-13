@@ -17,13 +17,14 @@ tests = testGroup "Tests for TP 2"
     , ex4Tests
     , ex5Tests
     , ex6Tests
-    , ex7Tests
     ]
 
 ex1Tests = testGroup "Tests for exercise 1"
     [ headTests
     , tailTests
     , lastTests
+    , intervalTests
+    , interval'Tests
     ]
 
 headTests = testGroup "Property tests for head'"
@@ -53,11 +54,6 @@ lastTests = testGroup "Property tests for last'"
         \(QC.NonEmpty l) -> last' (l :: [Int]) == last l
     ]
 
-ex2Tests = testGroup "Tests for exercise 2"
-    [ intervalTests
-    , interval'Tests
-    ]
-
 intervalTests = testGroup "Property tests for interval"
     [ SC.testProperty "interval n for n >= 0 equals [1..n] (SmallCheck)" $
         \(SCS.NonNegative n) -> interval (n :: Int) == [1..n]
@@ -72,30 +68,23 @@ interval'Tests = testGroup "Property tests for interval"
         \s k -> interval' (s :: Int) (k :: Int) === [s..k]
     ] 
 
-ex3Tests = testGroup "Tests for exercise 3"
-    [ reverseTests
-    , palindromePTests
+ex2Tests = testGroup "Tests for exercise 2"
+    [ isPalindromeTest
     , pairsTest
+    , prefixesTest
     , factorsTest
     , subseqsTest
     ]
 
-reverseTests = testGroup "Property tests for reverse'"
-    [ SC.testProperty "reverse' xs equals reverse xs (SmallCheck)" $
-        \xs -> reverse' (xs :: [Int]) == reverse xs
-    , QC.testProperty "reverse' xs equals reverse xs (QuickCheck)" $
-        \xs -> reverse' (xs :: [Int]) === reverse xs
-    ]
-
-palindromePTests = testGroup "Unit tests for reverse'"
+isPalindromeTest = testGroup "Unit tests for reverse'"
     [ testCase "[] is a palindrome" $
-        palindromeP ([] :: [Int]) @?= True
+        isPalindrome ([] :: [Int]) @?= True
     , testCase "\"radar\" is a palindrome" $
-        palindromeP "radar"  @?= True
+        isPalindrome "radar"  @?= True
     , testCase "\"abba\" is a palindrome" $
-        palindromeP "abba"   @?= True
+        isPalindrome "abba"   @?= True
     , testCase "\"abaa\" is not a palindrome" $
-        palindromeP "abaa"   @?= False
+        isPalindrome "abaa"   @?= False
     ]
 
 pairsTest = testGroup "Tests for pairs"
@@ -146,6 +135,31 @@ factorsTest = testGroup "Tests for factors"
         ] 
     ]
 
+prefixesTest = testGroup "Tests for prefixes"
+    -- FIXME: not testing for distinctness, no empty factor
+    [ testGroup "Unit tests for prefixes"
+        [ testCase "prefixes [] == []" $
+            prefixes ([] :: [Int]) @?= ([] :: [[Int]])
+        , testCase "prefixes [1] (up to order)" $
+            sort (prefixes [1]) @?= [[1]]
+        , testCase "prefixes [1, 2, 3, 4] (up to order)" $
+            sort (prefixes [1, 2, 3, 4]) @?= 
+                [ [1],[1,2],[1,2,3],[1,2,3,4] ]
+        ]
+    , testGroup "Property tests for prefixes"
+        [ SC.testProperty "all elements are actual prefixes (SmallCheck)" $
+            \xs -> all (`isInfixOf` xs) (prefixes (xs :: [Int]) :: [[Int]])
+        , SC.testProperty "number of prefixes is n (SmallCheck)" $
+            \xs -> let n = length xs in
+                length (prefixes (xs :: [Int]) :: [[Int]]) == n
+        , QC.testProperty "all elements are actual prefixes (QuickCheck)" $
+            \xs -> find (not . (`isPrefixOf` xs)) (prefixes (xs :: [Int]) :: [[Int]]) === Nothing
+        , QC.testProperty "number of prefixes is n (QuickCheck)" $
+            \xs -> let n = length xs in
+                length (prefixes (xs :: [Int]) :: [[Int]]) === n
+        ] 
+    ]
+
 subseqsTest = testGroup "Tests for subseqs"
     [ testGroup "Unit tests for subseqs"
         [ testCase "subseqs [] == []" $
@@ -164,46 +178,46 @@ subseqsTest = testGroup "Tests for subseqs"
         ] 
     ]
 
-ex4Tests = testGroup "Tests for exercise 4"
-    [ arithSeriePTest
-    , constantPTest
+ex3Tests = testGroup "Tests for exercise 3"
+    [ isArithSerieTest
+    , isConstantTest
     , mkArithSerieTest
     , complementaryEx4Test
     ]
 
-arithSeriePTest = testGroup "Tests for arithSerieP"
-    [ testGroup "Unit tests for arithSerieP"
-        [ testCase "arithSerieP [] == True" $
-            arithSerieP [] @=? True
-        , testCase "arithSerieP [2] == True" $
-            arithSerieP [2] @=? True
-        , testCase "arithSerieP [2, 5] == True" $
-            arithSerieP [2, 5] @=? True
-        , testCase "arithSerieP [2,5,8,11] == True" $
-            arithSerieP [2,5,8,11] @=? True
-        , testCase "arithSerieP [2,5,7,11] == False" $
-            arithSerieP [2,5,7,11] @=? False
+isArithSerieTest = testGroup "Tests for isArithSerie"
+    [ testGroup "Unit tests for isArithSerie"
+        [ testCase "isArithSerie [] == True" $
+            isArithSerie [] @=? True
+        , testCase "isArithSerie [2] == True" $
+            isArithSerie [2] @=? True
+        , testCase "isArithSerie [2, 5] == True" $
+            isArithSerie [2, 5] @=? True
+        , testCase "isArithSerie [2,5,8,11] == True" $
+            isArithSerie [2,5,8,11] @=? True
+        , testCase "isArithSerie [2,5,7,11] == False" $
+            isArithSerie [2,5,7,11] @=? False
         ]
     ]
 
-constantPTest = testGroup "Tests for constantP"
-    [ testGroup "Unit tests for constantP"
-        [ testCase "constantP [] == True" $
-            constantP ([] :: [Int]) @=? True
-        , testCase "constantP [2] == True" $
-            constantP [2] @=? True
-        , testCase "constantP [2, 2, 2, 5] == False" $
-            constantP [2, 2, 2, 5] @=? False
-        , testCase "constantP [2, 2, 2, 2] == True" $
-            constantP [2, 2, 2, 2] @=? True
+isConstantTest = testGroup "Tests for isConstant"
+    [ testGroup "Unit tests for isConstant"
+        [ testCase "isConstant [] == True" $
+            isConstant ([] :: [Int]) @=? True
+        , testCase "isConstant [2] == True" $
+            isConstant [2] @=? True
+        , testCase "isConstant [2, 2, 2, 5] == False" $
+            isConstant [2, 2, 2, 5] @=? False
+        , testCase "isConstant [2, 2, 2, 2] == True" $
+            isConstant [2, 2, 2, 2] @=? True
         ]
-    , testGroup "Property tests for constantP"
+    , testGroup "Property tests for isConstant"
         [ SC.testProperty 
-            "results of replicate make constantP True (SmallCheck)" $
-            \n c -> constantP $ replicate n (c :: Int) :: Bool
+            "results of replicate make isConstant True (SmallCheck)" $
+            \n c -> isConstant $ replicate n (c :: Int) :: Bool
         , QC.testProperty 
-            "results of replicate make constantP True (QuickCheck)" $
-            \n c -> constantP $ replicate n (c :: Int) :: Bool
+            "results of replicate make isConstant True (QuickCheck)" $
+            \n c -> isConstant $ replicate n (c :: Int) :: Bool
         ]
     ]
 
@@ -220,107 +234,107 @@ mkArithSerieTest = testGroup "Tests for mkArithSerie"
 
 complementaryEx4Test = testGroup "Complementary property tests for exercise 4"
     [ SC.testProperty 
-        "results of mkArithSerie u0 0 _ make constantP True (SmallCheck)" $
+        "results of mkArithSerie u0 0 _ make isConstant True (SmallCheck)" $
         \u (SCS.NonNegative n) -> 
-            constantP $ mkArithSerie (u :: Int) 0 (n :: Int) :: Bool
+            isConstant $ mkArithSerie (u :: Int) 0 (n :: Int) :: Bool
     , SC.testProperty 
-        "results of mkArithSerie u0 r _ make arithSerieP True (SmallCheck)" $
+        "results of mkArithSerie u0 r _ make isArithSerie True (SmallCheck)" $
         \u r (SCS.NonNegative n) -> 
-            arithSerieP $ mkArithSerie (u :: Int) (r :: Int) (n :: Int) :: Bool
+            isArithSerie $ mkArithSerie (u :: Int) (r :: Int) (n :: Int) :: Bool
     , QC.testProperty 
-        "results of mkArithSerie u0 0 _ make constantP True (SmallCheck)" $
+        "results of mkArithSerie u0 0 _ make isConstant True (SmallCheck)" $
         \u (QC.NonNegative n) -> 
-            constantP $ mkArithSerie (u :: Int) 0 (n :: Int) :: Bool
+            isConstant $ mkArithSerie (u :: Int) 0 (n :: Int) :: Bool
     , QC.testProperty 
-        "results of mkArithSerie u0 r _ make arithSerieP True (SmallCheck)" $
+        "results of mkArithSerie u0 r _ make isArithSerie True (SmallCheck)" $
         \u r (QC.NonNegative n) -> 
-            arithSerieP $ mkArithSerie (u :: Int) (r :: Int) (n :: Int) :: Bool
+            isArithSerie $ mkArithSerie (u :: Int) (r :: Int) (n :: Int) :: Bool
     ]
 
-ex5Tests = testGroup "Tests for exercise 4"
-    [ evenPTest
-    , oddPTest
-    , evenOddAlternatingPTest
-    , oddEvenAlternatingPTest
-    , alternatingPTest
+ex4Tests = testGroup "Tests for exercise 4"
+    [ isEvenTest
+    , isOddTest
+    , isEvenOddAlternatingTest
+    , isOddEvenAlternatingTest
+    , isAlternatingTest
     ]
 
-evenPTest = testGroup "Property tests for evenP"
+isEvenTest = testGroup "Property tests for isEven"
     [ SC.testProperty 
-        "evenP n equals even n (SmallCheck)" $
-        \(SCS.NonNegative n) -> evenP (n::Int) == even n
+        "isEven n equals even n (SmallCheck)" $
+        \(SCS.NonNegative n) -> isEven (n::Int) == even n
     , QC.testProperty 
-        "evenP n equals even n (QuickCheck)" $
-        \(QC.NonNegative n) -> evenP (n::Int) === even n
+        "isEven n equals even n (QuickCheck)" $
+        \(QC.NonNegative n) -> isEven (n::Int) === even n
     ]
 
-oddPTest = testGroup "Property tests for oddP"
+isOddTest = testGroup "Property tests for isOdd"
     [ SC.testProperty 
-        "oddP n equals odd n (SmallCheck)" $
-        \(SCS.NonNegative n) -> oddP (n::Int) == odd n
+        "isOdd n equals odd n (SmallCheck)" $
+        \(SCS.NonNegative n) -> isOdd (n::Int) == odd n
     , QC.testProperty 
-        "oddP n equals odd n (SmallCheck)" $
-        \(QC.NonNegative n) -> oddP (n::Int) === odd n
+        "isOdd n equals odd n (SmallCheck)" $
+        \(QC.NonNegative n) -> isOdd (n::Int) === odd n
     ]
 
-evenOddAlternatingPTest = testGroup "Property tests for evenOddAlternatingP"
+isEvenOddAlternatingTest = testGroup "Property tests for isEvenOddAlternating"
     [ SC.testProperty 
-        "evenOddAlternatingP [m..(m+n)] iff m is even (SmallCheck)" $
+        "isEvenOddAlternating [m..(m+n)] iff m is even (SmallCheck)" $
         \(SCS.NonNegative m) (SCS.NonNegative n) -> 
-            evenOddAlternatingP ([m..m+n] :: [Int]) == even m
+            isEvenOddAlternating ([m..m+n] :: [Int]) == even m
     , SC.testProperty 
-        "not evenOddAlternatingP (xs ++ [last xs]) (SmallCheck)" $
+        "not isEvenOddAlternating (xs ++ [last xs]) (SmallCheck)" $
         \(SCS.NonEmpty xs) -> 
-            not $ evenOddAlternatingP (xs ++ [last xs] :: [Int])
+            not $ isEvenOddAlternating (xs ++ [last xs] :: [Int])
     , QC.testProperty 
-        "evenOddAlternatingP [m..(m+n)] iff m is even (QuickCheck)" $
+        "isEvenOddAlternating [m..(m+n)] iff m is even (QuickCheck)" $
         \(QC.NonNegative m) (QC.NonNegative n) -> 
-            evenOddAlternatingP ([m..m+n] :: [Int]) == even m
+            isEvenOddAlternating ([m..m+n] :: [Int]) == even m
     , QC.testProperty 
-        "not evenOddAlternatingP (xs ++ [last xs]) (QuickCheck)" $
+        "not isEvenOddAlternating (xs ++ [last xs]) (QuickCheck)" $
         \(QC.NonEmpty xs) -> 
-            not $ evenOddAlternatingP (xs ++ [last xs] :: [Int])
+            not $ isEvenOddAlternating (xs ++ [last xs] :: [Int])
     ]
 
-oddEvenAlternatingPTest = testGroup "Property tests for oddEvenAlternatingP"
+isOddEvenAlternatingTest = testGroup "Property tests for isOddEvenAlternating"
     [ SC.testProperty 
-        "oddEvenAlternatingP [m..(m+n)] iff m is odd (SmallCheck)" $
+        "isOddEvenAlternating [m..(m+n)] iff m is odd (SmallCheck)" $
         \(SCS.NonNegative m) (SCS.NonNegative n) -> 
-            oddEvenAlternatingP ([m..m+n] :: [Int]) == odd m
+            isOddEvenAlternating ([m..m+n] :: [Int]) == odd m
     , SC.testProperty 
-        "not oddEvenAlternatingP (xs ++ [last xs]) (SmallCheck)" $
+        "not isOddEvenAlternating (xs ++ [last xs]) (SmallCheck)" $
         \(SCS.NonEmpty xs) -> 
-            not $ oddEvenAlternatingP (xs ++ [last xs] :: [Int])
+            not $ isOddEvenAlternating (xs ++ [last xs] :: [Int])
     , QC.testProperty 
-        "oddEvenAlternatingP [m..(m+n)] iff m is odd (QuickCheck)" $
+        "isOddEvenAlternating [m..(m+n)] iff m is odd (QuickCheck)" $
         \(QC.NonNegative m) (QC.NonNegative n) -> 
-            oddEvenAlternatingP ([m..m+n] :: [Int]) == odd m
+            isOddEvenAlternating ([m..m+n] :: [Int]) == odd m
     , QC.testProperty 
-        "not oddEvenAlternatingP (xs ++ [last xs]) (QuickCheck)" $
+        "not isOddEvenAlternating (xs ++ [last xs]) (QuickCheck)" $
         \(QC.NonEmpty xs) -> 
-            not $ oddEvenAlternatingP (xs ++ [last xs] :: [Int])
+            not $ isOddEvenAlternating (xs ++ [last xs] :: [Int])
     ]
 
-alternatingPTest = testGroup "Property tests for alternatingP"
+isAlternatingTest = testGroup "Property tests for isAlternating"
     [ SC.testProperty 
-        "alternatingP [m..(m+n)] (SmallCheck)" $
+        "isAlternating [m..(m+n)] (SmallCheck)" $
         \(SCS.NonNegative m) (SCS.NonNegative n) -> 
-            alternatingP ([m..m+n] :: [Int]) :: Bool
+            isAlternating ([m..m+n] :: [Int]) :: Bool
     , SC.testProperty 
-        "not alternatingP (xs ++ [last xs]) (SmallCheck)" $
+        "not isAlternating (xs ++ [last xs]) (SmallCheck)" $
         \(SCS.NonEmpty xs) -> 
-            not $ alternatingP (xs ++ [last xs] :: [Int])
+            not $ isAlternating (xs ++ [last xs] :: [Int])
     , QC.testProperty 
-        "alternatingP [m..(m+n)] (QuickCheck)" $
+        "isAlternating [m..(m+n)] (QuickCheck)" $
         \(QC.NonNegative m) (QC.NonNegative n) -> 
-            alternatingP ([m..m+n] :: [Int]) :: Bool
+            isAlternating ([m..m+n] :: [Int]) :: Bool
     , QC.testProperty 
-        "not alternatingP (xs ++ [last xs]) (QuickCheck)" $
+        "not isAlternating (xs ++ [last xs]) (QuickCheck)" $
         \(QC.NonEmpty xs) -> 
-            not $ alternatingP (xs ++ [last xs] :: [Int])
+            not $ isAlternating (xs ++ [last xs] :: [Int])
     ]
 
-ex6Tests = testGroup "Tests for exercise 5"
+ex5Tests = testGroup "Tests for exercise 5"
     [ mergeMsplitTest
     , mergeSortTest
     , quickSortTest
@@ -363,7 +377,7 @@ quickSortTest = testGroup "Property tests for quickSort"
         \xs -> quickSort (xs :: [Int]) === sort xs
     ]
 
-ex7Tests = testGroup "Tests for exercise 7"
+ex6Tests = testGroup "Tests for exercise 6"
     [ sumTest
     , maximumTest
     , lengthTest
@@ -371,6 +385,7 @@ ex7Tests = testGroup "Tests for exercise 7"
     , takeTest
     , dropTest
     , elemTest
+    , reverseTest
     ]
 
 sumTest = testGroup "Property tests for sum'"
@@ -439,3 +454,9 @@ elemTest = testGroup "Property tests for elem'"
         \n xs -> elem' n (xs :: [Int]) === elem n xs
     ]
 
+reverseTest = testGroup "Property tests for reverse'"
+    [ SC.testProperty "reverse' xs equals reverse xs (SmallCheck)" $
+        \xs -> reverse' (xs :: [Int]) == reverse xs
+    , QC.testProperty "reverse' xs equals reverse xs (QuickCheck)" $
+        \xs -> reverse' (xs :: [Int]) === reverse xs
+    ]

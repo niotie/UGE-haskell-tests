@@ -9,50 +9,47 @@ tail' = undefined
 
 last' = undefined
 
-
--- Exercise 2 -----------------
-
 interval = undefined
 
 interval' = undefined
 
 
--- Exercise 3 -----------------
+-- Exercise 2 -----------------
 
-reverse' = undefined
-
-palindromeP = undefined
+isPalindrome = undefined
 
 pairs = undefined
+
+prefixes = undefined
 
 factors = undefined
 
 subseqs = undefined
 
 
--- Exercise 4 -----------------
+-- Exercise 3 -----------------
 
-arithSerieP = undefined
+isArithSerie = undefined
 
-constantP = undefined
+isConstant = undefined
 
 mkArithSerie = undefined
 
 
+-- Exercise 4 -----------------
+
+isEven = undefined
+
+isOdd = undefined
+
+isEvenOddAlternating = undefined
+
+isOddEvenAlternating = undefined
+
+isAlternating = undefined
+
+
 -- Exercise 5 -----------------
-
-evenP = undefined
-
-oddP = undefined
-
-evenOddAlternatingP = undefined
-
-oddEvenAlternatingP = undefined
-
-alternatingP = undefined
-
-
--- Exercise 6 -----------------
 
 msplit = undefined
 
@@ -63,7 +60,7 @@ mergeSort = undefined
 quickSort = undefined
 
 
--- Exercise 7 -----------------
+-- Exercise 6 -----------------
 
 sum' = undefined
 
@@ -78,3 +75,5 @@ take' = undefined
 drop' = undefined
 
 elem' _ = undefined
+
+reverse' = undefined
