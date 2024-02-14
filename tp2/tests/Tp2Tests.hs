@@ -109,28 +109,29 @@ pairsTest = testGroup "Tests for pairs"
 factorsTest = testGroup "Tests for factors"
     -- FIXME: not testing for distinctness, no empty factor
     [ testGroup "Unit tests for factors"
-        [ testCase "factors [] == []" $
-            factors ([] :: [Int]) @?= ([] :: [[Int]])
+        [ testCase "factors [] == [[]]" $
+            factors ([] :: [Int]) @?= ([[]] :: [[Int]])
         , testCase "factors [1] (up to order)" $
-            sort (factors [1]) @?= [[1]]
+            sort (factors [1]) @?= [[1], []]
         , testCase "factors [1, 2, 3, 4] (up to order)" $
             sort (factors [1, 2, 3, 4]) @?= 
                 [ [1],[1,2],[1,2,3],[1,2,3,4]
                 , [2],[2,3],[2,3,4]
                 , [3],[3,4]
                 , [4]
+                , []
                 ]
         ]
     , testGroup "Property tests for factors"
         [ SC.testProperty "all elements are actual factors (SmallCheck)" $
             \xs -> all (`isInfixOf` xs) (factors (xs :: [Int]) :: [[Int]])
         , SC.testProperty "number of factors is n(n+1)/2 (SmallCheck)" $
-            \xs -> let n = length xs; n' = n * (n + 1) `div` 2 in
+            \xs -> let n = length xs; n' = n * (n + 1) `div` 2 + 1 in
                 length (factors (xs :: [Int]) :: [[Int]]) == n'
         , QC.testProperty "all elements are actual factors (QuickCheck)" $
             \xs -> find (not . (`isInfixOf` xs)) (factors (xs :: [Int]) :: [[Int]]) === Nothing
         , QC.testProperty "number of factors is n(n+1)/2 (QuickCheck)" $
-            \xs -> let n = length xs; n' = n * (n + 1) `div` 2 in
+            \xs -> let n = length xs; n' = n * (n + 1) `div` 2 + 1 in
                 length (factors (xs :: [Int]) :: [[Int]]) === n'
         ] 
     ]
