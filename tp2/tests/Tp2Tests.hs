@@ -112,14 +112,14 @@ factorsTest = testGroup "Tests for factors"
         [ testCase "factors [] == [[]]" $
             factors ([] :: [Int]) @?= ([[]] :: [[Int]])
         , testCase "factors [1] (up to order)" $
-            sort (factors [1]) @?= [[1], []]
+            sort (factors [1]) @?= [[], [1]]
         , testCase "factors [1, 2, 3, 4] (up to order)" $
             sort (factors [1, 2, 3, 4]) @?= 
-                [ [1],[1,2],[1,2,3],[1,2,3,4]
+                [ []
+                , [1],[1,2],[1,2,3],[1,2,3,4]
                 , [2],[2,3],[2,3,4]
                 , [3],[3,4]
                 , [4]
-                , []
                 ]
         ]
     , testGroup "Property tests for factors"
