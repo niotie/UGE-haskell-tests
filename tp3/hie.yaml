@@ -5,3 +5,6 @@ cradle:
 
     - path: "tests"
       component: "tp3:test"
+
+    - path: "bench"
+      component: "tp3:bench"

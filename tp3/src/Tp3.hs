@@ -11,6 +11,10 @@ map2 = undefined
 
 map3 = undefined
 
+map4 f = foldl (\acc x -> f x : acc) []
+
+map5 f = foldl (\acc x -> acc ++ [f x]) []
+
 filter1 = undefined
 
 filter2 = undefined

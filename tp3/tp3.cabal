@@ -13,6 +13,15 @@ library
     hs-source-dirs:   src
     default-language: Haskell2010
 
+executable bench
+  main-is: Bench.hs
+  build-depends:    
+      base
+    , criterion
+    , tp3
+  hs-source-dirs:   bench
+  default-language: Haskell2010
+
 test-suite test
   default-language:
     Haskell2010
@@ -27,7 +36,7 @@ test-suite test
   build-depends:
       base >= 4 && < 5
     , smallcheck
-    , tasty >= 0.7
+    , tasty
     , tasty-hunit
     , tasty-quickcheck
     , tasty-smallcheck

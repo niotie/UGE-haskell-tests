@@ -1,0 +1,32 @@
+import Criterion.Main
+import Data.List
+import Tp3
+
+main = defaultMain [
+    bgroup "permutations" [ bench "version native"  $ whnf permutations [1..20]
+                          , bench "version 1"  $ whnf permutations1 [1..20]
+                          , bench "version 2"  $ whnf permutations2 [1..20]
+                          , bench "version 3"  $ whnf permutations3 [1..20]
+                          ]
+  , bgroup "map" [ bench "version native"  $ nf (show . map (+ 1)) [1..1000]
+                 , bench "version 1"  $ nf ((sum :: [Int] -> Int) . map1 (+ 1)) [1..1000]
+                 , bench "version 2"  $ nf ((sum :: [Int] -> Int) . map2 (+ 1)) [1..1000]
+                 , bench "version 3"  $ nf ((sum :: [Int] -> Int) . map3 (+ 1)) [1..1000]
+                 , bench "version 4"  $ nf (show . map4 (+ 1)) [1..1000]
+                 , bench "version 5"  $ nf (show . map5 (+ 1)) [1..1000]
+                 ]
+  , bgroup "map4" [ bench "map4 10"  $ nf (show . map4 (+ 1)) [1..10]
+                  , bench "map4 20"  $ nf (show . map4 (+ 1)) [1..20]
+                  , bench "map4 30"  $ nf (show . map4 (+ 1)) [1..30]
+                  , bench "map4 40"  $ nf (show . map4 (+ 1)) [1..40]
+                  , bench "map4 50"  $ nf (show . map4 (+ 1)) [1..50]
+                  , bench "map4 60"  $ nf (show . map4 (+ 1)) [1..60]
+                  ]
+  , bgroup "map5" [ bench "map5 10"  $ nf (show . map5 (+ 1)) [1..10]
+                  , bench "map5 20"  $ nf (show . map5 (+ 1)) [1..20]
+                  , bench "map5 30"  $ nf (show . map5 (+ 1)) [1..30]
+                  , bench "map5 40"  $ nf (show . map5 (+ 1)) [1..40]
+                  , bench "map5 50"  $ nf (show . map5 (+ 1)) [1..50]
+                  , bench "map5 60"  $ nf (show . map5 (+ 1)) [1..60]
+                  ]
+  ]
