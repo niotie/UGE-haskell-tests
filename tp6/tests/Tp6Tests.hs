@@ -2,9 +2,6 @@ module Tp6Tests where
 
 import Test.Tasty
 import Test.Tasty.HUnit
-import Test.Tasty.QuickCheck as QC
-import Test.Tasty.SmallCheck as SC
-import Test.SmallCheck.Series as SCS
 
 import Tp6
 import Data.List (sort, subsequences)
@@ -210,7 +207,53 @@ mTreeSignatureTests = testGroup
            [13,19,15,18,24,12,29,23,17,18,25,23,19]
     ]
 
-ex4Tests = testGroup "Tests for exercise 4 -- Générations"
+ex4Tests = testGroup "Tests for exercise 4 -- Coupures et symétries"
+    [ mTreeIsoTopologyTests
+    , mTreeCutTests
+    ]
+
+mTreeIsoTopologyTests = testGroup
+    "Tests for mTreeIsoTopology"
+    [ testCase "simple test 1" $
+        mTreeIsoTopology (MTree 1 []) (MTree 2 [])           @?= True
+    , testCase "simple test 2" $
+        mTreeIsoTopology (MTree 1 [MTree 3 []]) (MTree 2 []) @?= False
+    , testCase "simple test 3" $
+        mTreeIsoTopology (MTree 1 [])
+                         (MTree 2 [MTree 3 []])              @?= False
+    , testCase "simple test 4" $
+        mTreeIsoTopology (MTree 1 [MTree 3 [], MTree 4 []])
+                         (MTree 2 [MTree 3 []])              @?= False
+    , testCase "simple test 5" $
+        mTreeIsoTopology (MTree 1 [MTree 3 [], MTree 4 []])
+                         (MTree 2 [MTree 3 [], MTree 5 []])  @?= True
+    , testCase "mTreeIsoTopology mTreeExample mTreeExample" $
+        mTreeIsoTopology mTreeExample mTreeExample @?= True
+    , testCase "mTreeIsoTopology mTreeExample (mTreeMap (+ 1) mTreeExample)" $
+        mTreeIsoTopology mTreeExample (mTreeMap (+ 1) mTreeExample) @?= True
+    , testCase "complex example 1" $
+        map (mTreeIsoTopology mTreeExample)
+            (mTreeFilter (/= 6) mTreeExample) @?= [False, False, False]
+    , testCase "complex example 2" $
+        map (mTreeIsoTopology mTreeExample)
+            (mTreeFilter (/= 10) mTreeExample) @?= [True]
+    ]
+
+mTreeCutTests = testGroup
+    "Tests for mTreeCut"
+    [ testCase "mTreeCut 1 mTreeExample" $
+        mTreeCut 1 mTreeExample @?= MTree 6 []
+    , testCase "mTreeCut 2 mTreeExample" $
+        mTreeCut 2 mTreeExample @?= 
+            MTree 6 [MTree 4 [],MTree 2 [],MTree 8 []]
+    , testCase "mTreeCut 3 mTreeExample" $
+        mTreeCut 3 mTreeExample @?= 
+            MTree 6 [MTree 4 [MTree 2 [],MTree 5 []],
+                     MTree 2 [MTree 3 []],
+                     MTree 8 [MTree 7 [],MTree 9 [],MTree 2 []]]
+    ]
+
+ex5Tests = testGroup "Tests for exercise 5 -- Générations"
     [ subsetsTests
     , permutedSubsetsTests
     , mTreesTests
@@ -264,50 +307,4 @@ mTreesTests = testGroup
                   MTree 'c' [MTree 'a' [MTree 'b' []]],
                   MTree 'c' [MTree 'b' [MTree 'a' []]]]
  ]
-
-ex5Tests = testGroup "Tests for exercise 5 -- Compléments"
-    [ mTreeIsoTopologyTests
-    , mTreeCutTests
-    ]
-
-mTreeIsoTopologyTests = testGroup
-    "Tests for mTreeIsoTopology"
-    [ testCase "simple test 1" $
-        mTreeIsoTopology (MTree 1 []) (MTree 2 [])           @?= True
-    , testCase "simple test 2" $
-        mTreeIsoTopology (MTree 1 [MTree 3 []]) (MTree 2 []) @?= False
-    , testCase "simple test 3" $
-        mTreeIsoTopology (MTree 1 [])
-                         (MTree 2 [MTree 3 []])              @?= False
-    , testCase "simple test 4" $
-        mTreeIsoTopology (MTree 1 [MTree 3 [], MTree 4 []])
-                         (MTree 2 [MTree 3 []])              @?= False
-    , testCase "simple test 5" $
-        mTreeIsoTopology (MTree 1 [MTree 3 [], MTree 4 []])
-                         (MTree 2 [MTree 3 [], MTree 5 []])  @?= True
-    , testCase "mTreeIsoTopology mTreeExample mTreeExample" $
-        mTreeIsoTopology mTreeExample mTreeExample @?= True
-    , testCase "mTreeIsoTopology mTreeExample (mTreeMap (+ 1) mTreeExample)" $
-        mTreeIsoTopology mTreeExample (mTreeMap (+ 1) mTreeExample) @?= True
-    , testCase "complex example 1" $
-        map (mTreeIsoTopology mTreeExample)
-            (mTreeFilter (/= 6) mTreeExample) @?= [False, False, False]
-    , testCase "complex example 2" $
-        map (mTreeIsoTopology mTreeExample)
-            (mTreeFilter (/= 10) mTreeExample) @?= [True]
-    ]
-
-mTreeCutTests = testGroup
-    "Tests for mTreeCut"
-    [ testCase "mTreeCut 1 mTreeExample" $
-        mTreeCut 1 mTreeExample @?= MTree 6 []
-    , testCase "mTreeCut 2 mTreeExample" $
-        mTreeCut 2 mTreeExample @?= 
-            MTree 6 [MTree 4 [],MTree 2 [],MTree 8 []]
-    , testCase "mTreeCut 3 mTreeExample" $
-        mTreeCut 3 mTreeExample @?= 
-            MTree 6 [MTree 4 [MTree 2 [],MTree 5 []],
-                     MTree 2 [MTree 3 []],
-                     MTree 8 [MTree 7 [],MTree 9 [],MTree 2 []]]
-    ]
-
+ 
