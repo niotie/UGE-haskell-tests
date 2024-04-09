@@ -39,7 +39,7 @@ ex1Tests = testGroup "Tests for exercise 1 -- Échauffement"
 
 sublistsTests = testGroup "Tests for sublists"
     [ HU.testCase "sublists []" $
-        sublists ([] :: [Int]) @?= ([] :: [Int])
+        sublists ([] :: [Int]) @?= ([] :: [[Int]])
     , HU.testCase "sublists [1]" $
         (sort . sublists) [1] @?= [[1]]
     , HU.testCase "sublists [1, 2]" $
