@@ -1,3 +1,4 @@
+{-# LANGUAGE StandaloneDeriving #-}
 module Tp7Tests where
 
 import Test.Tasty
@@ -21,6 +22,13 @@ instance (Arbitrary a, Ord a) => Arbitrary (ShortSortedList a) where
         return (ShortSortedList (sort xs))
     shrink (ShortSortedList (x:xs)) =
         [ShortSortedList xs | length xs > 1]
+
+deriving instance Eq BOp
+deriving instance Ord BOp
+deriving instance Eq AExpr
+deriving instance Ord AExpr
+deriving instance Eq VAExpr
+deriving instance Ord VAExpr
 
 tests = testGroup "Tests for TP 7"
     [ ex1Tests
@@ -91,7 +99,7 @@ valueTests = testGroup "Tests for value"
 
 ex2Tests = testGroup "Tests for exercise 2 -- Le solveur"
     [ unmerges1Tests
-    -- , combineVAExprs1Tests
+    , combineVAExprs1Tests
     -- , mkAExprs1Tests
     -- , searchBestTests
     -- , countdown1Tests
@@ -106,7 +114,11 @@ unmerges1Tests = testGroup "Tests for unmerges1"
                 \(ys, zs) -> collect (show . length $ xs) $ merge ys zs == (xs :: [Int])
     ]
 
-combineVAExprs1Tests = undefined
+combineVAExprs1Tests = testGroup "Tests for combineVAExprs1"
+    [ HU.testCase "combineVAExprs1 (VAExpr (Num 3, 3)) (VAExpr (Num 6, 6))" $
+        combineVAExprs1 (VAExpr (Num 3, 3)) (VAExpr (Num 6, 6)) @?= 
+            [VAExpr (App Add (Num 3) (Num 6),9),VAExpr (App Mul (Num 3) (Num 6),18)]
+    ]
 
 mkAExprs1Tests :: TestTree
 mkAExprs1Tests = undefined
