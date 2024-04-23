@@ -4,4 +4,4 @@ cradle:
       component: "lib:RALists"
 
     - path: "tests"
-      component: "ra-lists:test"
+      component: "ralists:test"
