@@ -18,8 +18,8 @@ myMax3 = undefined
 myAdd :: Int -> Int -> Int
 myAdd = undefined
 
-myMul :: Int -> Int -> Int
-myMul = undefined
+myMult :: Int -> Int -> Int
+myMult = undefined
 
 myFact :: Int -> Int
 myFact = undefined
