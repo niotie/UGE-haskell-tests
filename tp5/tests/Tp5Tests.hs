@@ -161,10 +161,10 @@ elemTestNeg = QC.testProperty "search element in known BST (absent element)" $ d
              else QCP.failed { QCP.reason = show x ++ " should not have been found in " ++ show t }
 
 ex2Tests = testGroup "Tests for exercise 2 -- Parcours"
-    [ inOrderTest
+    [ inOrderQCTest
     ]
 
-inOrderTest = QC.testProperty "values in infix visit are sorted" $
+inOrderQCTest = QC.testProperty "values in infix visit are sorted" $
     \t -> let xs = (inOrderVisitBSTree (t :: BSTree Int) :: [Int]) in 
         if sort xs == xs
         then QCP.succeeded
