@@ -109,14 +109,20 @@ myMap2 = M.fromList [(2, S.singleton 2), (3, S.fromList [1,2,3]), (4, S.singleto
 myMap3 :: MyMap Int
 myMap3 = M.fromList [(1, S.singleton 2), (3, S.singleton 3), (4, S.fromList [1,3,5])]
 
-fusionMap :: (Ord a) => MyMap a -> MyMap a -> MyMap a
-fusionMap = undefined
+addMyMap :: (Ord a) => a -> MyMap a -> MyMap a
+addMyMap = undefined
 
-lookupMap :: Ord a => a -> MyMap a -> Maybe [a]
-lookupMap = undefined
+onlySingletonMyMap :: MyMap a -> MyMap a
+onlySingletonMyMap = undefined
 
-reverseMap :: (Ord a) => MyMap a -> MyMap a
-reverseMap = undefined
+fusionMyMap :: (Ord a) => MyMap a -> MyMap a -> MyMap a
+fusionMyMap = undefined
+
+lookupMyMap :: Ord a => a -> MyMap a -> Maybe [a]
+lookupMyMap = undefined
+
+reverseMyMap :: (Ord a) => MyMap a -> MyMap a
+reverseMyMap = undefined
 
 
 -- Exercice 4 : Run-Length Encoding
@@ -125,13 +131,14 @@ reverseMap = undefined
 type RLERun = (Int, Char)
 
 -- (Char) run-length encoded list
-data RLEList = ConsRLEList RLERun RLEList | NilRLEList deriving (Eq, Ord)
+data RLEString = ConsRLEString RLERun RLEString | NilRLEString deriving (Eq, Ord)
 
-instance Show RLEList where
-  show = show . toListRLEList
-    where
-      toListRLEList NilRLEList = []
-      toListRLEList (ConsRLEList rleE rleL) = toListRLERun rleE ++ toListRLEList rleL
+instance Show RLEString where
+  show = show . toListRLEString
+
+toListRLEString :: RLEString -> String
+toListRLEString NilRLEString = []
+toListRLEString (ConsRLEString rleE rles) = toListRLERun rleE ++ toListRLEString rles
 
 mkRLERun :: Int -> Char -> RLERun
 mkRLERun = (,)
@@ -142,12 +149,12 @@ toListRLERun = uncurry L.replicate
 showRLERun :: RLERun -> String
 showRLERun = toListRLERun
 
-showRLEList :: RLEList -> String
-showRLEList NilRLEList = ""
-showRLEList (ConsRLEList r rlel) = show r ++ showRLEList rlel
+showRLEString :: RLEString -> String
+showRLEString NilRLEString = ""
+showRLEString (ConsRLEString r rles) = show r ++ showRLEString rles
 
-emptyRLEList :: RLEList
-emptyRLEList = NilRLEList
+emptyRLEString :: RLEString
+emptyRLEString = NilRLEString
 
 incRLERun :: RLERun -> RLERun
 incRLERun = undefined
@@ -155,24 +162,35 @@ incRLERun = undefined
 decRLERun :: RLERun -> RLERun
 decRLERun = undefined
 
-consRLEList :: Char -> RLEList -> RLEList
-consRLEList = undefined
+consRLEString :: Char -> RLEString -> RLEString
+consRLEString = undefined
 
-fromListRLEList :: [Char] -> RLEList
-fromListRLEList = undefined
+fromListRLEString :: String -> RLEString
+fromListRLEString = undefined
 
-headRLEList :: RLEList -> Maybe Char
-headRLEList = undefined
+headRLEString :: RLEString -> Maybe Char
+headRLEString = undefined
 
-tailRLEList :: RLEList -> Maybe (RLEList)
-tailRLEList = undefined
+tailRLEString :: RLEString -> Maybe RLEString
+tailRLEString = undefined
 
-initRLEList :: RLEList -> Maybe (RLEList)
-initRLEList = undefined
+initRLEString :: RLEString -> Maybe RLEString
+initRLEString = undefined
 
-(@++@) :: RLEList -> RLEList -> RLEList
+(@++@) :: RLEString -> RLEString -> RLEString
 (@++@) = undefined
 
-mapRLEList :: (Char -> Char) -> RLEList -> RLEList
-mapRLEList = undefined
+mapRLEString :: (Char -> Char) -> RLEString -> RLEString
+mapRLEString = undefined
 
+palindromeRLEString :: RLEString -> Bool
+palindromeRLEString = undefined
+
+takeRLEString :: Int -> RLEString -> RLEString
+takeRLEString = undefined
+
+dropRLEString :: Int -> RLEString -> RLEString
+dropRLEString = undefined
+
+splitAtRLEString :: Int -> RLEString -> (RLEString, RLEString)
+splitAtRLEString = undefined
