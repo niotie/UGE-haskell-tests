@@ -22,4 +22,4 @@ cabal.project.local~
 .HTF/
 .ghc.environment.*
 
-tp4-2024/rendus/
+rendus/
