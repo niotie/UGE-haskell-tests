@@ -19,8 +19,8 @@ flatten = undefined
 semiPalindrome :: (Eq a) => [a] -> Bool
 semiPalindrome = undefined
 
-shuffles :: [a] -> [a] -> [[a]]
-shuffles = undefined
+interleavings :: [a] -> [a] -> [[a]]
+interleavings = undefined
 
 
 -- Exercice 2 : Des missionnaires et des cannibales

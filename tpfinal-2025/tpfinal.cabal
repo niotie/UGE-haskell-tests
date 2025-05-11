@@ -25,7 +25,8 @@ test-suite test
   other-modules:
     TpfinalTests
   build-depends:
-      base >= 4 && < 5
+    base >= 4 && < 5
+    , containers
     , smallcheck
     , tasty >= 0.7
     , tasty-hunit
