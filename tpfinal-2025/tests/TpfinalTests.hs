@@ -298,7 +298,7 @@ consRLEStringTests =
     "Tests for consRLEString"
     [ testCase "consRLEString 'a' emptyRLEString" $
         show (consRLEString 'a' emptyRLEString)
-          @?= "a",
+          @?= "\"a\"",
       testCase "showRLEString $ consRLEString 'a' emptyRLEString" $
         showRLEString (consRLEString 'a' emptyRLEString)
           @?= "(1,'a')",
@@ -307,7 +307,7 @@ consRLEStringTests =
           ( consRLEString 'a' $
               consRLEString 'a' emptyRLEString
           )
-          @?= "aa",
+          @?= "\"aa\"",
       testCase "showRLEString . consRLEString 'a' $ consRLEString 'a' emptyRLEString" $
         showRLEString
           ( consRLEString 'a' $
@@ -319,7 +319,7 @@ consRLEStringTests =
           ( consRLEString 'b' $
               consRLEString 'a' emptyRLEString
           )
-          @?= "ba",
+          @?= "\"ba\"",
       testCase "showRLEString . consRLEString 'b' $ consRLEString 'a' emptyRLEString" $
         showRLEString
           ( consRLEString 'b' $
@@ -364,13 +364,13 @@ tailRLEStringTests =
           @?= Nothing,
       testCase "tailRLEString $ fromListRLEString \"a\"" $
         show <$> tailRLEString (fromListRLEString "a")
-          @?= Just "",
+          @?= Just "\"\"",
       testCase "tailRLEString $ fromListRLEString \"aabbbabcc\"" $
         show <$> tailRLEString (fromListRLEString "aabbbabcc")
-          @?= Just "abbbabcc",
+          @?= Just "\"abbbabcc\"",
       testCase "tailRLEString $ fromListRLEString \"abbbabcc\"" $
         show <$> tailRLEString (fromListRLEString "abbbabcc")
-          @?= Just "bbbabcc"
+          @?= Just "\"bbbabcc\""
     ]
 
 initRLEStringTests =
@@ -381,13 +381,13 @@ initRLEStringTests =
           @?= Nothing,
       testCase "initRLEString $ fromListRLEString \"a\"" $
         show <$> initRLEString (fromListRLEString "a")
-          @?= Just "",
+          @?= Just "\"\"",
       testCase "initRLEString $ fromListRLEString \"aabbbabcc\"" $
         show <$> initRLEString (fromListRLEString "aabbbabcc")
-          @?= Just "aabbbabc",
+          @?= Just "\"aabbbabc\"",
       testCase "initRLEString $ fromListRLEString \"aabbbabc\"" $
         show <$> initRLEString (fromListRLEString "aabbbabc")
-          @?= Just "aabbbab"
+          @?= Just "\"aabbbab\""
     ]
 
 concatRLEStringTests =
@@ -443,19 +443,19 @@ takeRLEStringTests =
         [ (i, show (takeRLEString i (fromListRLEString "abbcccdddd")))
           | i <- [-1 .. 11]
         ]
-          @?= [ (-1, ""),
-                (0, ""),
-                (1, "a"),
-                (2, "ab"),
-                (3, "abb"),
-                (4, "abbc"),
-                (5, "abbcc"),
-                (6, "abbccc"),
-                (7, "abbcccd"),
-                (8, "abbcccdd"),
-                (9, "abbcccddd"),
-                (10, "abbcccdddd"),
-                (11, "abbcccdddd")
+          @?= [ (-1, "\"\""),
+                (0, "\"\""),
+                (1, "\"a\""),
+                (2, "\"ab\""),
+                (3, "\"abb\""),
+                (4, "\"abbc\""),
+                (5, "\"abbcc\""),
+                (6, "\"abbccc\""),
+                (7, "\"abbcccd\""),
+                (8, "\"abbcccdd\""),
+                (9, "\"abbcccddd\""),
+                (10, "\"abbcccdddd\""),
+                (11, "\"abbcccdddd\"")
               ]
     ]
 
@@ -466,19 +466,19 @@ dropRLEStringTests =
         [ (i, show $ dropRLEString i (fromListRLEString "abbcccdddd"))
           | i <- [-1 .. 11]
         ]
-          @?= [ (-1, "abbcccdddd"),
-                (0, "abbcccdddd"),
-                (1, "bbcccdddd"),
-                (2, "bcccdddd"),
-                (3, "cccdddd"),
-                (4, "ccdddd"),
-                (5, "cdddd"),
-                (6, "dddd"),
-                (7, "ddd"),
-                (8, "dd"),
-                (9, "d"),
-                (10, ""),
-                (11, "")
+          @?= [ (-1, "\"abbcccdddd\""),
+                (0, "\"abbcccdddd\""),
+                (1, "\"bbcccdddd\""),
+                (2, "\"bcccdddd\""),
+                (3, "\"cccdddd\""),
+                (4, "\"ccdddd\""),
+                (5, "\"cdddd\""),
+                (6, "\"dddd\""),
+                (7, "\"ddd\""),
+                (8, "\"dd\""),
+                (9, "\"d\""),
+                (10, "\"\""),
+                (11, "\"\"")
               ]
     ]
 
@@ -487,19 +487,19 @@ splitAtRLEStringTests =
     "Tests for splitAtRLEString"
     [ testCase "[(i, splitAtRLEString i (fromListRLEString \"abbcccdddd\")) | i <- [-1..11]]" $
         [(i, join bimap show $ splitAtRLEString i (fromListRLEString "abbcccdddd")) | i <- [-1 .. 11]]
-          @?= [ (-1, ("", "abbcccdddd")),
-                (0, ("", "abbcccdddd")),
-                (1, ("a", "bbcccdddd")),
-                (2, ("ab", "bcccdddd")),
-                (3, ("abb", "cccdddd")),
-                (4, ("abbc", "ccdddd")),
-                (5, ("abbcc", "cdddd")),
-                (6, ("abbccc", "dddd")),
-                (7, ("abbcccd", "ddd")),
-                (8, ("abbcccdd", "dd")),
-                (9, ("abbcccddd", "d")),
-                (10, ("abbcccdddd", "")),
-                (11, ("abbcccdddd", ""))
+          @?= [ (-1, ("\"\"", "\"abbcccdddd\"")),
+                (0, ("\"\"", "\"abbcccdddd\"")),
+                (1, ("\"a\"", "\"bbcccdddd\"")),
+                (2, ("\"ab\"", "\"bcccdddd\"")),
+                (3, ("\"abb\"", "\"cccdddd\"")),
+                (4, ("\"abbc\"", "\"ccdddd\"")),
+                (5, ("\"abbcc\"", "\"cdddd\"")),
+                (6, ("\"abbccc\"", "\"dddd\"")),
+                (7, ("\"abbcccd\"", "\"ddd\"")),
+                (8, ("\"abbcccdd\"", "\"dd\"")),
+                (9, ("\"abbcccddd\"", "\"d\"")),
+                (10, ("\"abbcccdddd\"", "\"\"")),
+                (11, ("\"abbcccdddd\"", "\"\""))
               ]
     ]
 
