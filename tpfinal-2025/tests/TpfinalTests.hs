@@ -380,9 +380,9 @@ toRLESTests =
           @?= "(2,'a')(3,'b')(1,'a')(1,'b')(2,'c')"
     ]
 
-lengthLRESTests =
+lengthRLESTests =
   testGroup
-    "Tests for lengthRELS"
+    "Tests for lengthRLES"
     [ testCase "lengthRLES $ toRLES []" $
         lengthRLES (toRLES [])
           @?= 0,
@@ -594,7 +594,7 @@ ex3Tests =
       decRLERTests,
       consRLESTests,
       toRLESTests,
-      lengthLRESTests,
+      lengthRLESTests,
       headRLESTests,
       tailRLESTests,
       initRLESTests,
