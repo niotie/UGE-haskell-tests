@@ -64,19 +64,6 @@ runsTest =
 flattenTests =
   testGroup
     "Tests for flatten"
-    [ testCase "semiPalindrome \"\"" $
-        semiPalindrome "" @?= True,
-      testCase "semiPalindrome \"aabb\"" $
-        semiPalindrome "aabb" @?= True,
-      testCase "semiPalindrome \"aabba\"" $
-        semiPalindrome "aabba" @?= True,
-      testCase "semiPalindrome \"aabbab\"" $
-        semiPalindrome "aabbab" @?= False
-    ]
-
-semiPalidromeTests =
-  testGroup
-    "Tests for semiPalidrome"
     [ testCase "flatten []" $
         flatten ([] :: [[Int]]) @?= [],
       testCase "flatten [[1,2,3]]" $
@@ -85,6 +72,34 @@ semiPalidromeTests =
       testCase "flatten [[1,2,3],[4],[5,6],[7,8,9]]" $
         flatten [[1, 2, 3], [4], [5, 6], [7, 8, 9]]
           @?= [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    ]
+
+semiPalindromeTests =
+  testGroup
+    "Tests for semiPalindrome"
+    [ testCase "semiPalindrome \"\"" $
+        semiPalindrome "" @?= True,
+      testCase "semiPalindrome \"aabb\"" $
+        semiPalindrome "aabb" @?= True,
+      testCase "semiPalindrome \"aabba\"" $
+        semiPalindrome "aabba" @?= True,
+      testCase "semiPalindrome \"aabbab\"" $
+        semiPalindrome "aabbab" @?= False,
+      testCase "semiPalindrome . L.concat $ L.replicate 100 \"abc\"" $
+        ( semiPalindrome . L.concat $
+            L.replicate 100 "abc"
+        )
+          @?= True,
+      testCase "semiPalindrome . (++) \"a\" . L.concat $ L.replicate 100 \"abc\"" $
+        ( semiPalindrome . (++) "a" . L.concat $
+            L.replicate 100 "abc"
+        )
+          @?= True,
+      testCase "semiPalindrome . (++) \"ab\" . L.concat $ L.replicate 100 \"abc\"" $
+        ( semiPalindrome . (++) "ab" . L.concat $
+            L.replicate 100 "abc"
+        )
+          @?= False
     ]
 
 interleavingsTests =
@@ -134,7 +149,7 @@ ex1Tests =
     [ countPeaksTest,
       runsTest,
       flattenTests,
-      semiPalidromeTests,
+      semiPalindromeTests,
       interleavingsTests,
       squareInterleavingTests
     ]
