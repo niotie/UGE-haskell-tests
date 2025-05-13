@@ -7,6 +7,7 @@ module TpfinalTests where
 import Control.Monad (join)
 import Data.Bifunctor (bimap)
 import Data.Char (toUpper)
+import Data.List as L
 import Data.Map as M
 import Data.Set as S
 import Test.Tasty
@@ -18,8 +19,7 @@ tests =
     "Tests for Tpfinal"
     [ ex1Tests,
       ex2Tests,
-      ex3Tests,
-      ex4Tests
+      ex3Tests
     ]
 
 countPeaksTest =
@@ -109,6 +109,25 @@ interleavingsTests =
               ]
     ]
 
+squareInterleavingTests =
+  testGroup
+    "Tests for squareInterleaving"
+    [ testCase "squareInterleaving \"\"" $
+        squareInterleaving "" @?= True,
+      -- testCase "\"\" `L.elem` interleavings \"\" \"\"" $
+      --   ("" `L.elem` interleavings "" "") @?= True,
+      testCase "squareInterleaving \"aabb\"" $
+        squareInterleaving "aabb" @?= True,
+      -- testCase "\"aabb\" `L.elem` interleavings \"ab\" \"ab\"" $
+      --   "aabb" `L.elem` interleavings "ab" "ab" @?= True,
+      testCase "squareInterleaving \"aabbaababa\"" $
+        squareInterleaving "aabbaababa" @?= True,
+      -- testCase "\"aabbaababa\" `L.elem` interleavings \"aabba\" \"aabba\"" $
+      --   "aabbaababa" `L.elem` interleavings "aabba" "aabba" @?= True,
+      testCase "squareInterleaving \"aabbaababa\"" $
+        squareInterleaving "abbaaababa" @?= False
+    ]
+
 ex1Tests =
   testGroup
     "Tests for exercise 1"
@@ -116,13 +135,32 @@ ex1Tests =
       runsTest,
       flattenTests,
       semiPalidromeTests,
-      interleavingsTests
+      interleavingsTests,
+      squareInterleavingTests
     ]
 
-ex2Tests =
+singlesMyMapTests =
   testGroup
-    "Tests for exercise 2"
-    []
+    "Tests for singlesMyMapTests"
+    [ testCase "singlesMyMap []" $
+        singlesMyMap ([] :: [Int])
+          @?= M.empty,
+      testCase "singlesMyMap [1..3]" $
+        singlesMyMap [1 .. 3]
+          @?= M.fromList
+            [ (1, S.fromList [1]),
+              (2, S.fromList [2]),
+              (3, S.fromList [3])
+            ],
+      testCase "singlesMyMap $ L.concat [L.replicate 3 x | x <- [1..3]]" $
+        singlesMyMap
+          (L.concat [L.replicate 3 x | x <- [1 .. 3]])
+          @?= M.fromList
+            [ (1, S.fromList [1]),
+              (2, S.fromList [2]),
+              (3, S.fromList [3])
+            ]
+    ]
 
 addMyMapTests =
   testGroup
@@ -261,9 +299,9 @@ reverseMyMapTests =
             ]
     ]
 
-ex3Tests =
+ex2Tests =
   testGroup
-    "Tests for exercise 3"
+    "Tests for exercise 2"
     [ addMyMapTests,
       onlySingletonMyMapTests,
       fusionMyMapTests,
@@ -271,176 +309,190 @@ ex3Tests =
       reverseMyMapTests
     ]
 
-incRLERunTests =
+incRLERTests =
   testGroup
-    "Tests for incRLERun"
-    [ testCase "incRLERun (mkRLERun 3 'a')" $
-        incRLERun (mkRLERun 3 'a')
+    "Tests for incRLER"
+    [ testCase "incRLER (mkRLER 3 'a')" $
+        incRLER (mkRLER 3 'a')
           @?= (4, 'a'),
-      testCase "showRLERun (incRLERun (mkRLERun 3 'a'))" $
-        showRLERun (incRLERun (mkRLERun 3 'a'))
+      testCase "showRLER (incRLER (mkRLER 3 'a'))" $
+        showRLER (incRLER (mkRLER 3 'a'))
           @?= "aaaa"
     ]
 
-decRLERunTests =
+decRLERTests =
   testGroup
-    "Tests for decRLERun"
-    [ testCase "decRLERun (mkRLERun 3 'a')" $
-        decRLERun (mkRLERun 3 'a')
+    "Tests for decRLER"
+    [ testCase "decRLER (mkRLER 3 'a')" $
+        decRLER (mkRLER 3 'a')
           @?= (2, 'a'),
-      testCase "showRLERun (decRLERun (mkRLERun 3 'a'))" $
-        showRLERun (decRLERun (mkRLERun 3 'a'))
+      testCase "showRLER (decRLER (mkRLER 3 'a'))" $
+        showRLER (decRLER (mkRLER 3 'a'))
           @?= "aa"
     ]
 
-consRLEStringTests =
+consRLESTests =
   testGroup
-    "Tests for consRLEString"
-    [ testCase "consRLEString 'a' emptyRLEString" $
-        show (consRLEString 'a' emptyRLEString)
+    "Tests for consRLES"
+    [ testCase "consRLES 'a' emptyRLES" $
+        show (consRLES 'a' emptyRLES)
           @?= "\"a\"",
-      testCase "showRLEString $ consRLEString 'a' emptyRLEString" $
-        showRLEString (consRLEString 'a' emptyRLEString)
+      testCase "showRLES $ consRLES 'a' emptyRLES" $
+        showRLES (consRLES 'a' emptyRLES)
           @?= "(1,'a')",
-      testCase "consRLEString 'a' $ consRLEString 'a' emptyRLEString" $
+      testCase "consRLES 'a' $ consRLES 'a' emptyRLES" $
         show
-          ( consRLEString 'a' $
-              consRLEString 'a' emptyRLEString
+          ( consRLES 'a' $
+              consRLES 'a' emptyRLES
           )
           @?= "\"aa\"",
-      testCase "showRLEString . consRLEString 'a' $ consRLEString 'a' emptyRLEString" $
-        showRLEString
-          ( consRLEString 'a' $
-              consRLEString 'a' emptyRLEString
+      testCase "showRLES . consRLES 'a' $ consRLES 'a' emptyRLES" $
+        showRLES
+          ( consRLES 'a' $
+              consRLES 'a' emptyRLES
           )
           @?= "(2,'a')",
-      testCase "consRLEString 'b' $ consRLEString 'a' emptyRLEString" $
+      testCase "consRLES 'b' $ consRLES 'a' emptyRLES" $
         show
-          ( consRLEString 'b' $
-              consRLEString 'a' emptyRLEString
+          ( consRLES 'b' $
+              consRLES 'a' emptyRLES
           )
           @?= "\"ba\"",
-      testCase "showRLEString . consRLEString 'b' $ consRLEString 'a' emptyRLEString" $
-        showRLEString
-          ( consRLEString 'b' $
-              consRLEString 'a' emptyRLEString
+      testCase "showRLES . consRLES 'b' $ consRLES 'a' emptyRLES" $
+        showRLES
+          ( consRLES 'b' $
+              consRLES 'a' emptyRLES
           )
           @?= "(1,'b')(1,'a')"
     ]
 
-fromListRLEStringTests =
+toRLESTests =
   testGroup
-    "Tests for fromListRLEString"
-    [ testCase "showRLEString $ fromListRLEString []" $
-        showRLEString (fromListRLEString [])
+    "Tests for toRLES"
+    [ testCase "showRLES $ toRLES []" $
+        showRLES (toRLES [])
           @?= "",
-      testCase "showRLEString $ fromListRLEString \"a\"" $
-        showRLEString (fromListRLEString "a")
+      testCase "showRLES $ toRLES \"a\"" $
+        showRLES (toRLES "a")
           @?= "(1,'a')",
-      testCase "showRLEString $ fromListRLEString \"aabbbabcc\"" $
-        showRLEString (fromListRLEString "aabbbabcc")
+      testCase "showRLES $ toRLES \"aabbbabcc\"" $
+        showRLES (toRLES "aabbbabcc")
           @?= "(2,'a')(3,'b')(1,'a')(1,'b')(2,'c')"
     ]
 
-headRLEStringTests =
+lengthLRESTests =
   testGroup
-    "Tests for headRLEString"
-    [ testCase "headRLEString $ fromListRLEString []" $
-        headRLEString (fromListRLEString [])
+    "Tests for lengthRELS"
+    [ testCase "lengthRLES $ toRLES []" $
+        lengthRLES (toRLES [])
+          @?= 0,
+      testCase "lengthRLES $ toRLES \"abcd\"" $
+        lengthRLES (toRLES "abcd")
+          @?= 4,
+      testCase "lengthRLES $ toRLES \"abbcccdddd\"" $
+        lengthRLES (toRLES "abbcccdddd")
+          @?= 10
+    ]
+
+headRLESTests =
+  testGroup
+    "Tests for headRLES"
+    [ testCase "headRLES $ toRLES []" $
+        headRLES (toRLES [])
           @?= Nothing,
-      testCase "headRLEString $ fromListRLEString \"a\"" $
-        headRLEString (fromListRLEString "a")
+      testCase "headRLES $ toRLES \"a\"" $
+        headRLES (toRLES "a")
           @?= Just 'a',
-      testCase "headRLEString $ fromListRLEString \"aabbbabcc\"" $
-        headRLEString (fromListRLEString "aabbbabcc")
+      testCase "headRLES $ toRLES \"aabbbabcc\"" $
+        headRLES (toRLES "aabbbabcc")
           @?= Just 'a'
     ]
 
-tailRLEStringTests =
+tailRLESTests =
   testGroup
-    "Tests for tailRLEString"
-    [ testCase "tailRLEString $ fromListRLEString []" $
-        tailRLEString (fromListRLEString [])
+    "Tests for tailRLES"
+    [ testCase "tailRLES $ toRLES []" $
+        tailRLES (toRLES [])
           @?= Nothing,
-      testCase "tailRLEString $ fromListRLEString \"a\"" $
-        show <$> tailRLEString (fromListRLEString "a")
+      testCase "tailRLES $ toRLES \"a\"" $
+        show <$> tailRLES (toRLES "a")
           @?= Just "\"\"",
-      testCase "tailRLEString $ fromListRLEString \"aabbbabcc\"" $
-        show <$> tailRLEString (fromListRLEString "aabbbabcc")
+      testCase "tailRLES $ toRLES \"aabbbabcc\"" $
+        show <$> tailRLES (toRLES "aabbbabcc")
           @?= Just "\"abbbabcc\"",
-      testCase "tailRLEString $ fromListRLEString \"abbbabcc\"" $
-        show <$> tailRLEString (fromListRLEString "abbbabcc")
+      testCase "tailRLES $ toRLES \"abbbabcc\"" $
+        show <$> tailRLES (toRLES "abbbabcc")
           @?= Just "\"bbbabcc\""
     ]
 
-initRLEStringTests =
+initRLESTests =
   testGroup
-    "Tests for initRLEString"
-    [ testCase "initRLEString $ fromListRLEString []" $
-        initRLEString (fromListRLEString [])
+    "Tests for initRLES"
+    [ testCase "initRLES $ toRLES []" $
+        initRLES (toRLES [])
           @?= Nothing,
-      testCase "initRLEString $ fromListRLEString \"a\"" $
-        show <$> initRLEString (fromListRLEString "a")
+      testCase "initRLES $ toRLES \"a\"" $
+        show <$> initRLES (toRLES "a")
           @?= Just "\"\"",
-      testCase "initRLEString $ fromListRLEString \"aabbbabcc\"" $
-        show <$> initRLEString (fromListRLEString "aabbbabcc")
+      testCase "initRLES $ toRLES \"aabbbabcc\"" $
+        show <$> initRLES (toRLES "aabbbabcc")
           @?= Just "\"aabbbabc\"",
-      testCase "initRLEString $ fromListRLEString \"aabbbabc\"" $
-        show <$> initRLEString (fromListRLEString "aabbbabc")
+      testCase "initRLES $ toRLES \"aabbbabc\"" $
+        show <$> initRLES (toRLES "aabbbabc")
           @?= Just "\"aabbbab\""
     ]
 
-concatRLEStringTests =
+concatRLESTests =
   testGroup
     "Tests for (@++@)"
-    [ testCase "showRLEString $ fromListRLEString \"aabb\" @++@ fromListRLEString \"ccdd\"" $
-        showRLEString
-          ( fromListRLEString "aabb"
-              @++@ fromListRLEString "ccdd"
+    [ testCase "showRLES $ toRLES \"aabb\" @++@ toRLES \"ccdd\"" $
+        showRLES
+          ( toRLES "aabb"
+              @++@ toRLES "ccdd"
           )
           @?= "(2,'a')(2,'b')(2,'c')(2,'d')",
-      testCase "showRLEString $ fromListRLEString \"aabb\" @++@ fromListRLEString \"bbdd\"" $
-        showRLEString
-          ( fromListRLEString "aabb"
-              @++@ fromListRLEString "bbdd"
+      testCase "showRLES $ toRLES \"aabb\" @++@ toRLES \"bbdd\"" $
+        showRLES
+          ( toRLES "aabb"
+              @++@ toRLES "bbdd"
           )
           @?= "(2,'a')(4,'b')(2,'d')"
     ]
 
-mapRLEStringTests =
+mapRLESTests =
   testGroup
-    "Tests for mapRLEString"
+    "Tests for mapRLES"
     [ testCase "toUpper" $
-        showRLEString (mapRLEString toUpper $ fromListRLEString "abbccc")
+        showRLES (mapRLES toUpper $ toRLES "abbccc")
           @?= "(1,'A')(2,'B')(3,'C')",
       testCase "const 'A'" $
-        showRLEString (mapRLEString (const 'A') $ fromListRLEString "abbcccdddd")
+        showRLES (mapRLES (const 'A') $ toRLES "abbcccdddd")
           @?= "(10,'A')",
       testCase "\\x -> if x `L.elem` ['A'..'L'] then '0' else '1'" $
-        showRLEString
-          ( mapRLEString
+        showRLES
+          ( mapRLES
               (\x -> if x `elem` ['A' .. 'L'] then '0' else '1')
-              $ fromListRLEString ['A' .. 'Z']
+              $ toRLES ['A' .. 'Z']
           )
           @?= "(12,'0')(14,'1')"
     ]
 
-palindromeRLEStringTests =
+palindromeRLESTests =
   testGroup
-    "Tests for palindromeRLEString"
-    [ testCase "palindromeRLEString $ fromListRLEString \"abbcccbba\"" $
-        palindromeRLEString (fromListRLEString "abbcccbba")
+    "Tests for palindromeRLES"
+    [ testCase "palindromeRLES $ toRLES \"abbcccbba\"" $
+        palindromeRLES (toRLES "abbcccbba")
           @?= True,
-      testCase "palindromeRLEString $ fromListRLEString \"abbbaa\"" $
-        palindromeRLEString (fromListRLEString "abbbaa")
+      testCase "palindromeRLES $ toRLES \"abbbaa\"" $
+        palindromeRLES (toRLES "abbbaa")
           @?= False
     ]
 
-takeRLEStringTests =
+takeRLESTests =
   testGroup
-    "Tests for takeRLEString"
-    [ testCase "[(i, takeRLEString i (fromListRLEString \"abbcccdddd\")) | i <- [-1..11]]" $
-        [ (i, show (takeRLEString i (fromListRLEString "abbcccdddd")))
+    "Tests for takeRLES"
+    [ testCase "[(i, takeRLES i (toRLES \"abbcccdddd\")) | i <- [-1..11]]" $
+        [ (i, show (takeRLES i (toRLES "abbcccdddd")))
           | i <- [-1 .. 11]
         ]
           @?= [ (-1, "\"\""),
@@ -459,11 +511,11 @@ takeRLEStringTests =
               ]
     ]
 
-dropRLEStringTests =
+dropRLESTests =
   testGroup
-    "Tests for dropRLEString"
-    [ testCase "[(i, dropRLEString i (fromListRLEString \"abbcccdddd\")) | i <- [-1..11]]" $
-        [ (i, show $ dropRLEString i (fromListRLEString "abbcccdddd"))
+    "Tests for dropRLES"
+    [ testCase "[(i, dropRLES i (toRLES \"abbcccdddd\")) | i <- [-1..11]]" $
+        [ (i, show $ dropRLES i (toRLES "abbcccdddd"))
           | i <- [-1 .. 11]
         ]
           @?= [ (-1, "\"abbcccdddd\""),
@@ -482,11 +534,11 @@ dropRLEStringTests =
               ]
     ]
 
-splitAtRLEStringTests =
+splitAtRLESTests =
   testGroup
-    "Tests for splitAtRLEString"
-    [ testCase "[(i, splitAtRLEString i (fromListRLEString \"abbcccdddd\")) | i <- [-1..11]]" $
-        [(i, join bimap show $ splitAtRLEString i (fromListRLEString "abbcccdddd")) | i <- [-1 .. 11]]
+    "Tests for splitAtRLES"
+    [ testCase "[(i, splitAtRLES i (toRLES \"abbcccdddd\")) | i <- [-1..11]]" $
+        [(i, join bimap show $ splitAtRLES i (toRLES "abbcccdddd")) | i <- [-1 .. 11]]
           @?= [ (-1, ("\"\"", "\"abbcccdddd\"")),
                 (0, ("\"\"", "\"abbcccdddd\"")),
                 (1, ("\"a\"", "\"bbcccdddd\"")),
@@ -503,20 +555,55 @@ splitAtRLEStringTests =
               ]
     ]
 
-ex4Tests =
+countRLESTests =
   testGroup
-    "Tests for exercise 4"
-    [ incRLERunTests,
-      decRLERunTests,
-      consRLEStringTests,
-      fromListRLEStringTests,
-      headRLEStringTests,
-      tailRLEStringTests,
-      initRLEStringTests,
-      concatRLEStringTests,
-      mapRLEStringTests,
-      palindromeRLEStringTests,
-      takeRLEStringTests,
-      dropRLEStringTests,
-      splitAtRLEStringTests
+    "Tests for countRLESTests"
+    [ testCase "countRLES 'a' $ toRLES \"abbcccdddabab\"" $
+        countRLES 'a' (toRLES "abbcccdddabab")
+          @?= 3,
+      testCase "countRLES 'b' $ toRLES \"abbcccdddabab\"" $
+        countRLES 'b' (toRLES "abbcccdddabab")
+          @?= 4,
+      testCase "countRLES 'e' $ toRLES \"abbcccdddabab\"" $
+        countRLES 'e' (toRLES "abbcccdddabab")
+          @?= 0
+    ]
+
+mapRLES'Tests =
+  testGroup
+    "Tests for mapRLES'"
+    [ testCase "toUpper" $
+        showRLES (mapRLES' toUpper $ toRLES "abbccc")
+          @?= "(1,'A')(2,'B')(3,'C')",
+      testCase "const 'A'" $
+        showRLES (mapRLES' (const 'A') $ toRLES "abbcccdddd")
+          @?= "(10,'A')",
+      testCase "\\x -> if x `L.elem` ['A'..'L'] then '0' else '1'" $
+        showRLES
+          ( mapRLES'
+              (\x -> if x `elem` ['A' .. 'L'] then '0' else '1')
+              $ toRLES ['A' .. 'Z']
+          )
+          @?= "(12,'0')(14,'1')"
+    ]
+
+ex3Tests =
+  testGroup
+    "Tests for exercise 3"
+    [ incRLERTests,
+      decRLERTests,
+      consRLESTests,
+      toRLESTests,
+      lengthLRESTests,
+      headRLESTests,
+      tailRLESTests,
+      initRLESTests,
+      concatRLESTests,
+      mapRLESTests,
+      palindromeRLESTests,
+      takeRLESTests,
+      dropRLESTests,
+      splitAtRLESTests,
+      countRLESTests,
+      mapRLES'Tests
     ]

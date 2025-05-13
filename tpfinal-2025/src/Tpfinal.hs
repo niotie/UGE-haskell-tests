@@ -5,6 +5,7 @@ import qualified Data.List as L
 import qualified Data.Map.Strict as M
 import qualified Data.Set as S
 
+
 -- Exercice 1 : Listes
 
 countPeaks :: (Ord a) => [a] -> Int
@@ -22,8 +23,128 @@ semiPalindrome = undefined
 interleavings :: [a] -> [a] -> [[a]]
 interleavings = undefined
 
+squareInterleaving :: (Eq a) => [a] -> Bool
+squareInterleaving = undefined
 
--- Exercice 2 : Des missionnaires et des cannibales
+
+-- Exercice 2 : Maps
+
+type MyMap a = M.Map a (S.Set a)
+
+myMap1 :: MyMap Int
+myMap1 = M.fromList [(1, S.singleton 2), (2, S.singleton 3), (3, S.fromList [2,3,4])]
+
+myMap2 :: MyMap Int
+myMap2 = M.fromList [(2, S.singleton 2), (3, S.fromList [1,2,3]), (4, S.singleton 1)]
+
+myMap3 :: MyMap Int
+myMap3 = M.fromList [(1, S.singleton 2), (3, S.singleton 3), (4, S.fromList [1,3,5])]
+
+
+singlesMyMap :: (Ord a) => [a] -> MyMap a
+singlesMyMap = undefined
+
+addMyMap :: (Ord a) => a -> MyMap a -> MyMap a
+addMyMap = undefined
+
+onlySingletonMyMap :: MyMap a -> MyMap a
+onlySingletonMyMap = undefined
+
+fusionMyMap :: (Ord a) => MyMap a -> MyMap a -> MyMap a
+fusionMyMap = undefined
+
+lookupMyMap :: Ord a => a -> MyMap a -> Maybe [a]
+lookupMyMap = undefined
+
+reverseMyMap :: (Ord a) => MyMap a -> MyMap a
+reverseMyMap = undefined
+
+
+-- Exercice 3 : Run-Length Encoding
+
+-- RLE Run
+type RLER = (Int, Char)
+
+-- RLE String (i.e. Char run-length encoded list)
+data RLES = Cons RLER RLES | Nil  deriving (Eq, Ord)
+
+instance Show RLES where
+  show = show . toListRLES
+
+toListRLES :: RLES -> String
+toListRLES Nil = []
+toListRLES (Cons rleE rles) = toListRLER rleE ++ toListRLES rles
+
+mkRLER :: Int -> Char -> RLER
+mkRLER = (,)
+
+toListRLER :: RLER -> String
+toListRLER = uncurry L.replicate
+
+showRLER :: RLER -> String
+showRLER = toListRLER
+
+showRLES :: RLES -> String
+showRLES Nil = ""
+showRLES (Cons r rles) = show r ++ showRLES rles
+
+emptyRLES :: RLES
+emptyRLES = Nil
+
+incRLER :: RLER -> RLER
+incRLER = undefined
+
+decRLER :: RLER -> RLER
+decRLER = undefined
+
+consRLES :: Char -> RLES -> RLES
+consRLES = undefined
+
+toRLES :: String -> RLES
+toRLES = undefined
+
+lengthRLES :: RLES -> Int
+lengthRLES = undefined
+
+headRLES :: RLES -> Maybe Char
+headRLES = undefined
+
+tailRLES :: RLES -> Maybe RLES
+tailRLES = undefined
+
+initRLES :: RLES -> Maybe RLES
+initRLES = undefined
+
+(@++@) :: RLES -> RLES -> RLES
+(@++@) = undefined
+
+mapRLES :: (Char -> Char) -> RLES -> RLES
+mapRLES = undefined
+
+palindromeRLES :: RLES -> Bool
+palindromeRLES = undefined
+
+takeRLES :: Int -> RLES -> RLES
+takeRLES = undefined
+
+dropRLES :: Int -> RLES -> RLES
+dropRLES = undefined
+
+splitAtRLES :: Int -> RLES -> (RLES, RLES)
+splitAtRLES = undefined
+
+foldrRLES :: (RLER -> a -> a) -> a -> RLES -> a
+foldrRLES f acc Nil = acc
+foldrRLES f acc (Cons rler rlel) = f rler (foldrRLES f acc rlel)
+
+countRLES :: Char -> RLES -> Int
+countRLES = undefined
+
+mapRLES' :: (Char -> Char) -> RLES -> RLES
+mapRLES' = undefined
+
+
+-- Exercice supprimé : Des missionnaires et des cannibales
 
 -- Maximum umber of persons on the boat
 type BoatCapacity = Int
@@ -94,103 +215,3 @@ solveBest = undefined
 
 opt :: Configuration -> Int
 opt = undefined
-
-
--- Exercice 3 : Maps
-
-type MyMap a = M.Map a (S.Set a)
-
-myMap1 :: MyMap Int
-myMap1 = M.fromList [(1, S.singleton 2), (2, S.singleton 3), (3, S.fromList [2,3,4])]
-
-myMap2 :: MyMap Int
-myMap2 = M.fromList [(2, S.singleton 2), (3, S.fromList [1,2,3]), (4, S.singleton 1)]
-
-myMap3 :: MyMap Int
-myMap3 = M.fromList [(1, S.singleton 2), (3, S.singleton 3), (4, S.fromList [1,3,5])]
-
-addMyMap :: (Ord a) => a -> MyMap a -> MyMap a
-addMyMap = undefined
-
-onlySingletonMyMap :: MyMap a -> MyMap a
-onlySingletonMyMap = undefined
-
-fusionMyMap :: (Ord a) => MyMap a -> MyMap a -> MyMap a
-fusionMyMap = undefined
-
-lookupMyMap :: Ord a => a -> MyMap a -> Maybe [a]
-lookupMyMap = undefined
-
-reverseMyMap :: (Ord a) => MyMap a -> MyMap a
-reverseMyMap = undefined
-
-
--- Exercice 4 : Run-Length Encoding
-
--- run
-type RLERun = (Int, Char)
-
--- (Char) run-length encoded list
-data RLEString = ConsRLEString RLERun RLEString | NilRLEString deriving (Eq, Ord)
-
-instance Show RLEString where
-  show = show . toListRLEString
-
-toListRLEString :: RLEString -> String
-toListRLEString NilRLEString = []
-toListRLEString (ConsRLEString rleE rles) = toListRLERun rleE ++ toListRLEString rles
-
-mkRLERun :: Int -> Char -> RLERun
-mkRLERun = (,)
-
-toListRLERun :: RLERun -> String
-toListRLERun = uncurry L.replicate
-
-showRLERun :: RLERun -> String
-showRLERun = toListRLERun
-
-showRLEString :: RLEString -> String
-showRLEString NilRLEString = ""
-showRLEString (ConsRLEString r rles) = show r ++ showRLEString rles
-
-emptyRLEString :: RLEString
-emptyRLEString = NilRLEString
-
-incRLERun :: RLERun -> RLERun
-incRLERun = undefined
-
-decRLERun :: RLERun -> RLERun
-decRLERun = undefined
-
-consRLEString :: Char -> RLEString -> RLEString
-consRLEString = undefined
-
-fromListRLEString :: String -> RLEString
-fromListRLEString = undefined
-
-headRLEString :: RLEString -> Maybe Char
-headRLEString = undefined
-
-tailRLEString :: RLEString -> Maybe RLEString
-tailRLEString = undefined
-
-initRLEString :: RLEString -> Maybe RLEString
-initRLEString = undefined
-
-(@++@) :: RLEString -> RLEString -> RLEString
-(@++@) = undefined
-
-mapRLEString :: (Char -> Char) -> RLEString -> RLEString
-mapRLEString = undefined
-
-palindromeRLEString :: RLEString -> Bool
-palindromeRLEString = undefined
-
-takeRLEString :: Int -> RLEString -> RLEString
-takeRLEString = undefined
-
-dropRLEString :: Int -> RLEString -> RLEString
-dropRLEString = undefined
-
-splitAtRLEString :: Int -> RLEString -> (RLEString, RLEString)
-splitAtRLEString = undefined
