@@ -51,6 +51,9 @@ runsTest =
       testCase "runs [1,2,3,4,5]" $
         runs [1, 2, 3, 4, 5]
           @?= [[1, 2, 3, 4, 5]],
+      testCase "runs [5,4,3,2,1]" $
+        runs [1, 2, 3, 4, 5]
+          @?= [[5], [4], [3], [2], [1]],
       testCase "runs [1,4,3,5,7,5,4,6,8,3,5]" $
         runs [1, 4, 3, 5, 7, 5, 4, 6, 8, 3, 5]
           @?= [ [1, 4],
@@ -314,6 +317,43 @@ reverseMyMapTests =
             ]
     ]
 
+representativeMyMapTests =
+  testGroup
+    "Tests for representativeMyMap"
+    [ testCase "representativeMyMap myMap1" $
+        representativeMyMap myMap1
+          @?= M.fromList
+            [ (1, S.fromList []),
+              (2, S.fromList []),
+              (3, S.fromList [4])
+            ],
+      testCase "representativeMyMap myMap2" $
+        representativeMyMap myMap2
+          @?= M.fromList
+            [ (2, S.fromList []),
+              (3, S.fromList [3]),
+              (4, S.fromList [])
+            ],
+      testCase "representativeMyMap myMap3" $
+        representativeMyMap myMap3
+          @?= M.fromList
+            [ (1, S.fromList [2]),
+              (3, S.fromList []),
+              (4, S.fromList [1, 5])
+            ],
+      testCase "avec singletons" $
+        representativeMyMap
+          ( M.fromList
+              [(i, S.singleton i) | i <- [1 .. 4]]
+          )
+          @?= M.fromList
+            [ (1, S.fromList [1]),
+              (2, S.fromList [2]),
+              (3, S.fromList [3]),
+              (4, S.fromList [4])
+            ]
+    ]
+
 ex2Tests =
   testGroup
     "Tests for exercise 2"
@@ -321,7 +361,8 @@ ex2Tests =
       onlySingletonMyMapTests,
       fusionMyMapTests,
       lookupMyMapTests,
-      reverseMyMapTests
+      reverseMyMapTests,
+      representativeMyMapTests
     ]
 
 incRLERTests =

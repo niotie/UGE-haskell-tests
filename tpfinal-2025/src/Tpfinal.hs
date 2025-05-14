@@ -5,7 +5,6 @@ import qualified Data.List as L
 import qualified Data.Map.Strict as M
 import qualified Data.Set as S
 
-
 -- Exercice 1 : Listes
 
 countPeaks :: (Ord a) => [a] -> Int
@@ -26,20 +25,33 @@ interleavings = undefined
 squareInterleaving :: (Eq a) => [a] -> Bool
 squareInterleaving = undefined
 
-
 -- Exercice 2 : Maps
 
 type MyMap a = M.Map a (S.Set a)
 
 myMap1 :: MyMap Int
-myMap1 = M.fromList [(1, S.singleton 2), (2, S.singleton 3), (3, S.fromList [2,3,4])]
+myMap1 =
+  M.fromList
+    [ (1, S.singleton 2),
+      (2, S.singleton 3),
+      (3, S.fromList [2, 3, 4])
+    ]
 
 myMap2 :: MyMap Int
-myMap2 = M.fromList [(2, S.singleton 2), (3, S.fromList [1,2,3]), (4, S.singleton 1)]
+myMap2 =
+  M.fromList
+    [ (2, S.singleton 2),
+      (3, S.fromList [1, 2, 3]),
+      (4, S.singleton 1)
+    ]
 
 myMap3 :: MyMap Int
-myMap3 = M.fromList [(1, S.singleton 2), (3, S.singleton 3), (4, S.fromList [1,3,5])]
-
+myMap3 =
+  M.fromList
+    [ (1, S.singleton 2),
+      (3, S.singleton 3),
+      (4, S.fromList [1, 3, 5])
+    ]
 
 singlesMyMap :: (Ord a) => [a] -> MyMap a
 singlesMyMap = undefined
@@ -53,12 +65,14 @@ onlySingletonMyMap = undefined
 fusionMyMap :: (Ord a) => MyMap a -> MyMap a -> MyMap a
 fusionMyMap = undefined
 
-lookupMyMap :: Ord a => a -> MyMap a -> Maybe [a]
+lookupMyMap :: (Ord a) => a -> MyMap a -> Maybe [a]
 lookupMyMap = undefined
 
 reverseMyMap :: (Ord a) => MyMap a -> MyMap a
 reverseMyMap = undefined
 
+representativeMyMap :: (Ord a) => MyMap a -> MyMap a
+representativeMyMap = undefined
 
 -- Exercice 3 : Run-Length Encoding
 
@@ -66,7 +80,7 @@ reverseMyMap = undefined
 type RLER = (Int, Char)
 
 -- RLE String (i.e. Char run-length encoded list)
-data RLES = Cons RLER RLES | Nil  deriving (Eq, Ord)
+data RLES = Cons RLER RLES | Nil deriving (Eq, Ord)
 
 instance Show RLES where
   show = show . toListRLES
@@ -143,7 +157,6 @@ countRLES = undefined
 mapRLES' :: (Char -> Char) -> RLES -> RLES
 mapRLES' = undefined
 
-
 -- Exercice supprimé : Des missionnaires et des cannibales
 
 -- Maximum umber of persons on the boat
@@ -151,22 +164,25 @@ type BoatCapacity = Int
 
 -- number of missionaries and cannibals, resp.
 type NMissionaries = Int
+
 type NCannibals = Int
 
 -- Booat is either on the left bank (L) or on the right bank (R)
 data Boat = L | R deriving (Show, Eq, Ord)
 
 -- A group of missionaries and cannibals
-data Group = Group { nM :: NMissionaries, nC :: NCannibals } deriving (Show, Eq, Ord)
+data Group = Group {nM :: NMissionaries, nC :: NCannibals} deriving (Show, Eq, Ord)
 
 -- The whole configuration:
 -- lGroup is the group on the left bank
 -- rGroup is the group on the right bank
 -- boat indicates where is the boat
-data Configuration = Configuration { lGroup :: Group
-                                   , rGroup :: Group
-                                   , boat :: Boat
-                                   } deriving (Show, Eq, Ord)
+data Configuration = Configuration
+  { lGroup :: Group,
+    rGroup :: Group,
+    boat :: Boat
+  }
+  deriving (Show, Eq, Ord)
 
 -- A list of configurations.
 -- The initial configuration is the first configuration.
@@ -175,7 +191,7 @@ type Seq = [Configuration]
 
 -- convenient Group constructor
 mkGroup :: NMissionaries -> NCannibals -> Group
-mkGroup nM nC = Group { nM = nM, nC = nC }
+mkGroup nM nC = Group {nM = nM, nC = nC}
 
 -- make the null group
 emptyGroup :: Group
@@ -187,13 +203,16 @@ nullGroup g = nM g == 0 && nC g == 0
 
 -- convenient Configuration constructor
 mkConfiguration :: Group -> Group -> Boat -> Configuration
-mkConfiguration lG rG b = Configuration { lGroup = lG, rGroup = rG, boat = b }
+mkConfiguration lG rG b = Configuration {lGroup = lG, rGroup = rG, boat = b}
 
 -- make an initial configuration with given numbers of missionaries and cannibals
 initialConfiguration :: Int -> Int -> Configuration
-initialConfiguration nM nC = Configuration { lGroup = mkGroup nM nC
-                                           , rGroup = emptyGroup
-                                           , boat = L }
+initialConfiguration nM nC =
+  Configuration
+    { lGroup = mkGroup nM nC,
+      rGroup = emptyGroup,
+      boat = L
+    }
 
 finalConfiguration :: Configuration -> Bool
 finalConfiguration = undefined
