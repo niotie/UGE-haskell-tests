@@ -76,7 +76,6 @@ treeWithLeafCount n = aux 1 (2 * n - 1)
 treeWithHeight h = aux h 1 (2^h-1)
     where
         aux h l g | h == 0 = return Empty
-                  | h == 0 = return $ Node Empty ((l + g) `div` 2) Empty
                   | otherwise = oneof $
                         [liftM3 Node lt (return r) rt |
                             let r = (l + g) `div` 2,
