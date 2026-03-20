@@ -1,0 +1,4 @@
+- Besoin de `{-# LANGUAGE FlexibleInstances #-}` dans `Result.hs`.
+- `import qualified` dans `Automaton.hs`
+- Restriction de la grammaire sur `*` : nécessaire ?
+- Messages d'erreur : "Unexpected end of string", et "got ..."
