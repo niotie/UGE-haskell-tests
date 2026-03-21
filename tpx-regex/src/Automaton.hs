@@ -1,17 +1,17 @@
 -- PART 2 – Simulating Automata
 
 module Automaton
-  ( Automaton (..),
-    Input (..),
-    State,
-    TransTable,
-    accepts,
-    maxState,
-    mkTransTable,
-    exampleAutomaton1,
-    exampleAutomaton2,
-    exampleAutomaton3,
-  )
+-- ( Automaton (..),
+--   Input (..),
+--   State,
+--   TransTable,
+--   accepts,
+--   maxState,
+--   mkTransTable,
+--   exampleAutomaton1,
+--   exampleAutomaton2,
+--   exampleAutomaton3,
+-- )
 where
 
 import qualified Data.List as L

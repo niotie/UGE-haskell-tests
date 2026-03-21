@@ -6,8 +6,8 @@ author:             Antoine Meyer
 maintainer:         antoine.meyer@univ-eiffel.fr
 
 library
-    exposed-modules:  Regex Automaton Thompson
-    other-modules:  Result Word
+    exposed-modules:  Regex, Automaton, Thompson
+    other-modules:  Result, Word
     build-depends:    
         base
       , containers
@@ -18,9 +18,10 @@ test-suite test
   type: exitcode-stdio-1.0
   main-is: Driver.hs
   hs-source-dirs: tests
-  other-modules:  RegexTests
+  other-modules:  RegexTests, AutomatonTests
   build-depends: 
       base
+    , containers
     , tasty
     , tasty-hunit
     , tasty-discover
