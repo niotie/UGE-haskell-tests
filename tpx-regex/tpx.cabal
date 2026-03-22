@@ -18,7 +18,7 @@ test-suite test
   type: exitcode-stdio-1.0
   main-is: Driver.hs
   hs-source-dirs: tests
-  other-modules:  RegexTests, AutomatonTests
+  other-modules:  RegexTests, AutomatonTests, ThompsonTests
   build-depends: 
       base
     , containers

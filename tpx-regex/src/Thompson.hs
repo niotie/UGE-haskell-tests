@@ -1,8 +1,8 @@
 -- PART 3 – From Regular Expressions to Automata
 
 module Thompson
-  ( match,
-  )
+-- ( match,
+-- )
 where
 
 import Automaton
