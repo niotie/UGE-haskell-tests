@@ -14,8 +14,8 @@ module Automaton
 -- )
 where
 
-import qualified Data.List as L
-import qualified Data.Map as M
+import Data.List qualified as L
+import Data.Map qualified as M
 import Numeric.Natural (Natural)
 import Word
 import Prelude hiding (Word)

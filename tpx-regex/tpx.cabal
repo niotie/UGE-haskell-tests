@@ -28,3 +28,4 @@ test-suite test
     , regex
   build-tool-depends:
     tasty-discover:tasty-discover
+  default-language: GHC2021
