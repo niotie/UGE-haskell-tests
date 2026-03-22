@@ -35,6 +35,7 @@ data Automaton
     transTable :: TransTable,
     acceptStates :: [State]
   }
+  deriving Eq
 
 instance Show Automaton where
   show auto =

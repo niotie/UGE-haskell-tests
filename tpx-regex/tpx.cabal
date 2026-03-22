@@ -12,7 +12,7 @@ library
         base
       , containers
     hs-source-dirs:   src
-    default-language: Haskell2010
+    default-language: GHC2021
 
 test-suite test
   type: exitcode-stdio-1.0
@@ -28,24 +28,3 @@ test-suite test
     , regex
   build-tool-depends:
     tasty-discover:tasty-discover
-
--- test-suite test
---   default-language:
---     Haskell2010
---   type:
---     exitcode-stdio-1.0
---   hs-source-dirs:
---     tests
---   main-is:
---     test.hs
---   other-modules:
---     RegexTests
---   build-depends:
---       base >= 4 && < 5
---     , smallcheck
---     , QuickCheck
---     , tasty
---     , tasty-hunit
---     , tasty-quickcheck
---     , tasty-smallcheck
---     , regex

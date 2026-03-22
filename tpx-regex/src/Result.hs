@@ -1,5 +1,3 @@
-{-# LANGUAGE FlexibleInstances #-}
-
 module Result
   ( Applicative (..),
     MonadFail (..),
