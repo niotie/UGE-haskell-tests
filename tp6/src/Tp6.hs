@@ -62,24 +62,34 @@ mTreeExample = root
 
 -- Exercice 1
 
+mTreeCount :: Num b => MTree a -> b
 mTreeCount = undefined
 
+mTreeIsLeaf :: MTree a -> Bool
 mTreeIsLeaf = undefined
 
+mTreeLeaves :: MTree a -> [a]
 mTreeLeaves = undefined
 
+mTreeCountLeaves :: Num b => MTree a -> b
 mTreeCountLeaves = undefined
 
+mTreeSum :: Num a => MTree a -> a
 mTreeSum = undefined
 
+mTreeHeight :: (Num b, Ord b) => MTree a -> b
 mTreeHeight = undefined
 
+mTreeElem :: Eq a => a -> MTree a -> Bool
 mTreeElem = undefined
 
+mTreeMin :: Ord a => MTree a -> a
 mTreeMin = undefined
 
+mTreeMax :: Ord a => MTree a -> a
 mTreeMax = undefined
 
+mTreeToList :: MTree a -> [a]
 mTreeToList = undefined
 
 
@@ -91,23 +101,30 @@ mTreeBreadthFirstTraversal = undefined
 
 mForestBreadthFirstTraversal = undefined
 
+mTreeLayer :: Int -> MTree a -> [a]
 mTreeLayer = undefined
 
 
 -- Exercice 3
 
+mTreeMap :: (a -> b) -> MTree a -> MTree b
 mTreeMap = undefined
 
+mTreeFilter :: (a -> Bool) -> MTree a -> MForest a
 mTreeFilter = undefined
 
+mTreeFold1 :: (a -> b -> b) -> b -> MTree a -> [b]
 mTreeFold1 f z (MTree rl []) = [f rl z]
 mTreeFold1 f z (MTree rl mts) =
     [f rl y | mt' <- mts, y <- mTreeFold1 f z mt']
 
+mTreeCollectPaths :: MTree a -> [[a]]
 mTreeCollectPaths = undefined
 
+mTreeSignature :: (Num a) => MTree a -> [a]
 mTreeSignature = undefined
 
+mTreeFold2 :: (a -> [b] -> b) -> MTree a -> b
 mTreeFold2 f (MTree rl mts) = f rl xs
     where xs = map (mTreeFold2 f) mts
 
@@ -120,20 +137,23 @@ mTreeMax' = undefined
 mTreeSum' :: Num a => MTree a -> a
 mTreeSum' = undefined
 
+mTreeToList' :: MTree a -> [a]
 mTreeToList' = undefined
 
 
--- Exercice 4 - Générations
+-- Exercice 4 - Compléments
 
-subsets = undefined
-
-permutedSubsets = undefined
-
-mTrees = undefined
-
-
--- Exercice 5 - Compléments
-
+mTreeIsoTopology :: MTree a -> MTree b -> Bool
 mTreeIsoTopology = undefined
 
+mTreeCut :: (Eq b, Num b) => b -> MTree a -> MTree a
 mTreeCut = undefined
+
+
+-- Exercice 5 - Générations (*)
+
+subsets :: [a] -> [[a]]
+subsets = undefined
+
+mTrees :: (Eq a) => [a] -> MForest a
+mTrees = undefined
