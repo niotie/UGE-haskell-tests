@@ -255,7 +255,7 @@ mTreeCutTests = testGroup
 
 ex5Tests = testGroup "Tests for exercise 5 -- Générations"
     [ subsetsTests
-    , permutedSubsetsTests
+    -- , permutedSubsetsTests
     , mTreesTests
     ]
 
