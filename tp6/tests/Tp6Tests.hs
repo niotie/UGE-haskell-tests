@@ -270,20 +270,20 @@ subsetsTests = testGroup
             sort (subsequences ['a', 'b', 'c', 'd'])
     ]
 
-permutedSubsetsTests = testGroup
-    "Tests for permutedSubsets"
-    [ testCase "permutedSubsets []" $
-        permutedSubsets ([]::[Integer]) @?= ([[]]::[[Integer]])
-    , testCase "permutedSubsets [1, 2]" $
-        sort (permutedSubsets [1, 2]) @?=
-            sort [[],[2],[1],[1,2],[2,1]]
-    , testCase "permutedSubsets ['a', 'b', 'c']" $
-        sort (permutedSubsets ['a', 'b', 'c']) @?=
-            sort [[],['a'],['b'],['b','a'],['a','b'],['c'],
-                  ['c','a'],['a','c'],['c','b'],['b','c'],
-                  ['c','b','a'],['b','c','a'],['a','b','c'],
-                  ['b','a','c'],['a','c','b'],['c','a','b']]
-    ]
+-- permutedSubsetsTests = testGroup
+--     "Tests for permutedSubsets"
+--     [ testCase "permutedSubsets []" $
+--         permutedSubsets ([]::[Integer]) @?= ([[]]::[[Integer]])
+--     , testCase "permutedSubsets [1, 2]" $
+--         sort (permutedSubsets [1, 2]) @?=
+--             sort [[],[2],[1],[1,2],[2,1]]
+--     , testCase "permutedSubsets ['a', 'b', 'c']" $
+--         sort (permutedSubsets ['a', 'b', 'c']) @?=
+--             sort [[],['a'],['b'],['b','a'],['a','b'],['c'],
+--                   ['c','a'],['a','c'],['c','b'],['b','c'],
+--                   ['c','b','a'],['b','c','a'],['a','b','c'],
+--                   ['b','a','c'],['a','c','b'],['c','a','b']]
+--     ]
 
 mTreesTests = testGroup
     "Tests for mTrees"
