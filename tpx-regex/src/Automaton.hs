@@ -1,17 +1,25 @@
 -- PART 2 – Simulating Automata
 
 module Automaton
--- ( Automaton (..),
---   Input (..),
---   State,
---   TransTable,
---   accepts,
---   maxState,
---   mkTransTable,
---   exampleAutomaton1,
---   exampleAutomaton2,
---   exampleAutomaton3,
--- )
+  ( Automaton (..),
+    Input (..),
+    State,
+    TransTable,
+    accepts,
+    maxState,
+    mkTransTable,
+    exampleAutomaton1,
+    exampleAutomaton2,
+    exampleAutomaton3,
+    -- Internal functions
+    -- (exported for testing)
+    alphabet,
+    states,
+    transFunc,
+    untilFixpoint,
+    epsilonClosure,
+    reachedStates,
+  )
 where
 
 import Data.List qualified as L
@@ -35,7 +43,7 @@ data Automaton
     transTable :: TransTable,
     acceptStates :: [State]
   }
-  deriving Eq
+  deriving (Eq)
 
 instance Show Automaton where
   show auto =
