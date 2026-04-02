@@ -1,15 +1,19 @@
 -- PART 1 – Parsing Regular Expressions
 
 module Regex
-  -- ( Regex (..),
-  --   toRegex,
-  -- )
+  ( Regex (..),
+    toRegex,
+    -- Internal functions
+    -- (exported for testing)
+    parseAtom,
+    parseFactor,
+    parseTerm,
+    parseRegex,
+  )
 where
 
 import Result
 import Word
-
-import Data.Char (isAlpha)
 
 data Regex
   = EmptyLang
@@ -18,7 +22,7 @@ data Regex
   | Concat Regex Regex
   | Union Regex Regex
   | Star Regex
-  deriving Eq
+  deriving (Eq)
 
 instance Show Regex where
   show = (<> "\n") . show' []

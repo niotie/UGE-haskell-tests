@@ -1,8 +1,19 @@
 -- PART 3 – From Regular Expressions to Automata
 
 module Thompson
--- ( match,
--- )
+  ( match,
+    -- Internal functions
+    -- (exported for testing)
+    emptyAutomaton,
+    epsilonAutomaton,
+    letterAutomaton,
+    merge,
+    mapToStates,
+    concat,
+    union,
+    star,
+    toAutomaton,
+  )
 where
 
 import Automaton
