@@ -90,9 +90,9 @@ test_toRegex =
       testCase "failure on hanging open parenthesis" $
         toRegex "a(" @?= Left "Unexpected end of string",
       testCase "non-empty suffix (closing parenthesis)" $
-        toRegex "a)" @?= Left "Unexpected suffix : )",
+        toRegex "a)" @?= Left "Unexpected suffix: )",
       testCase "non-empy suffix (lots of stuff)" $
-        toRegex "a#@!?%" @?= Left "Unexpected suffix : #@!?%",
+        toRegex "a#@!?%" @?= Left "Unexpected suffix: #@!?%",
       testCase "complex regex 1" $
         toRegex "(a*b|c)d"
           @?= Right
