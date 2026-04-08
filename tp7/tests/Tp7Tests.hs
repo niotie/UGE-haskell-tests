@@ -100,9 +100,9 @@ valueTests = testGroup "Tests for value"
 ex2Tests = testGroup "Tests for exercise 2 -- Le solveur"
     [ unmerges1Tests
     , combineVAExprs1Tests
-    -- , mkAExprs1Tests
-    -- , searchBestTests
-    -- , countdown1Tests
+    , mkAExprs1Tests
+    , searchBestTests
+    , countdown1Tests
     ]
 
 unmerges1Tests = testGroup "Tests for unmerges1"
@@ -121,12 +121,144 @@ combineVAExprs1Tests = testGroup "Tests for combineVAExprs1"
     ]
 
 mkAExprs1Tests :: TestTree
-mkAExprs1Tests = undefined
+mkAExprs1Tests =
+  testGroup
+    "Tests for mkAExprs1"
+    [ HU.testCase "mkAExprs1 [1,2,3]" $
+        sort (mkAExprs1 [1, 2, 3])
+          @?= [ VAExpr (App Add (Num 1) (App Add (Num 2) (Num 3)), 6),
+                VAExpr (App Add (Num 1) (App Add (Num 3) (Num 2)), 6),
+                VAExpr (App Add (Num 1) (App Sub (Num 3) (Num 2)), 2),
+                VAExpr (App Add (Num 1) (App Mul (Num 2) (Num 3)), 7),
+                VAExpr (App Add (Num 1) (App Mul (Num 3) (Num 2)), 7),
+                VAExpr (App Add (Num 2) (App Add (Num 1) (Num 3)), 6),
+                VAExpr (App Add (Num 2) (App Add (Num 3) (Num 1)), 6),
+                VAExpr (App Add (Num 2) (App Sub (Num 3) (Num 1)), 4),
+                VAExpr (App Add (Num 2) (App Mul (Num 1) (Num 3)), 5),
+                VAExpr (App Add (Num 2) (App Mul (Num 3) (Num 1)), 5),
+                VAExpr (App Add (Num 2) (App Div (Num 3) (Num 1)), 5),
+                VAExpr (App Add (Num 3) (App Add (Num 1) (Num 2)), 6),
+                VAExpr (App Add (Num 3) (App Add (Num 2) (Num 1)), 6),
+                VAExpr (App Add (Num 3) (App Sub (Num 2) (Num 1)), 4),
+                VAExpr (App Add (Num 3) (App Mul (Num 1) (Num 2)), 5),
+                VAExpr (App Add (Num 3) (App Mul (Num 2) (Num 1)), 5),
+                VAExpr (App Add (Num 3) (App Div (Num 2) (Num 1)), 5),
+                VAExpr (App Add (App Add (Num 1) (Num 2)) (Num 3), 6),
+                VAExpr (App Add (App Add (Num 1) (Num 3)) (Num 2), 6),
+                VAExpr (App Add (App Add (Num 2) (Num 1)) (Num 3), 6),
+                VAExpr (App Add (App Add (Num 2) (Num 3)) (Num 1), 6),
+                VAExpr (App Add (App Add (Num 3) (Num 1)) (Num 2), 6),
+                VAExpr (App Add (App Add (Num 3) (Num 2)) (Num 1), 6),
+                VAExpr (App Add (App Sub (Num 2) (Num 1)) (Num 3), 4),
+                VAExpr (App Add (App Sub (Num 3) (Num 1)) (Num 2), 4),
+                VAExpr (App Add (App Sub (Num 3) (Num 2)) (Num 1), 2),
+                VAExpr (App Add (App Mul (Num 1) (Num 2)) (Num 3), 5),
+                VAExpr (App Add (App Mul (Num 1) (Num 3)) (Num 2), 5),
+                VAExpr (App Add (App Mul (Num 2) (Num 1)) (Num 3), 5),
+                VAExpr (App Add (App Mul (Num 2) (Num 3)) (Num 1), 7),
+                VAExpr (App Add (App Mul (Num 3) (Num 1)) (Num 2), 5),
+                VAExpr (App Add (App Mul (Num 3) (Num 2)) (Num 1), 7),
+                VAExpr (App Add (App Div (Num 2) (Num 1)) (Num 3), 5),
+                VAExpr (App Add (App Div (Num 3) (Num 1)) (Num 2), 5),
+                VAExpr (App Sub (Num 1) (App Sub (Num 3) (Num 2)), 0),
+                VAExpr (App Sub (Num 2) (App Sub (Num 3) (Num 1)), 0),
+                VAExpr (App Sub (Num 3) (App Add (Num 1) (Num 2)), 0),
+                VAExpr (App Sub (Num 3) (App Add (Num 2) (Num 1)), 0),
+                VAExpr (App Sub (Num 3) (App Sub (Num 2) (Num 1)), 2),
+                VAExpr (App Sub (Num 3) (App Mul (Num 1) (Num 2)), 1),
+                VAExpr (App Sub (Num 3) (App Mul (Num 2) (Num 1)), 1),
+                VAExpr (App Sub (Num 3) (App Div (Num 2) (Num 1)), 1),
+                VAExpr (App Sub (App Add (Num 1) (Num 2)) (Num 3), 0),
+                VAExpr (App Sub (App Add (Num 1) (Num 3)) (Num 2), 2),
+                VAExpr (App Sub (App Add (Num 2) (Num 1)) (Num 3), 0),
+                VAExpr (App Sub (App Add (Num 2) (Num 3)) (Num 1), 4),
+                VAExpr (App Sub (App Add (Num 3) (Num 1)) (Num 2), 2),
+                VAExpr (App Sub (App Add (Num 3) (Num 2)) (Num 1), 4),
+                VAExpr (App Sub (App Sub (Num 3) (Num 1)) (Num 2), 0),
+                VAExpr (App Sub (App Sub (Num 3) (Num 2)) (Num 1), 0),
+                VAExpr (App Sub (App Mul (Num 1) (Num 3)) (Num 2), 1),
+                VAExpr (App Sub (App Mul (Num 2) (Num 3)) (Num 1), 5),
+                VAExpr (App Sub (App Mul (Num 3) (Num 1)) (Num 2), 1),
+                VAExpr (App Sub (App Mul (Num 3) (Num 2)) (Num 1), 5),
+                VAExpr (App Sub (App Div (Num 3) (Num 1)) (Num 2), 1),
+                VAExpr (App Mul (Num 1) (App Add (Num 2) (Num 3)), 5),
+                VAExpr (App Mul (Num 1) (App Add (Num 3) (Num 2)), 5),
+                VAExpr (App Mul (Num 1) (App Sub (Num 3) (Num 2)), 1),
+                VAExpr (App Mul (Num 1) (App Mul (Num 2) (Num 3)), 6),
+                VAExpr (App Mul (Num 1) (App Mul (Num 3) (Num 2)), 6),
+                VAExpr (App Mul (Num 2) (App Add (Num 1) (Num 3)), 8),
+                VAExpr (App Mul (Num 2) (App Add (Num 3) (Num 1)), 8),
+                VAExpr (App Mul (Num 2) (App Sub (Num 3) (Num 1)), 4),
+                VAExpr (App Mul (Num 2) (App Mul (Num 1) (Num 3)), 6),
+                VAExpr (App Mul (Num 2) (App Mul (Num 3) (Num 1)), 6),
+                VAExpr (App Mul (Num 2) (App Div (Num 3) (Num 1)), 6),
+                VAExpr (App Mul (Num 3) (App Add (Num 1) (Num 2)), 9),
+                VAExpr (App Mul (Num 3) (App Add (Num 2) (Num 1)), 9),
+                VAExpr (App Mul (Num 3) (App Sub (Num 2) (Num 1)), 3),
+                VAExpr (App Mul (Num 3) (App Mul (Num 1) (Num 2)), 6),
+                VAExpr (App Mul (Num 3) (App Mul (Num 2) (Num 1)), 6),
+                VAExpr (App Mul (Num 3) (App Div (Num 2) (Num 1)), 6),
+                VAExpr (App Mul (App Add (Num 1) (Num 2)) (Num 3), 9),
+                VAExpr (App Mul (App Add (Num 1) (Num 3)) (Num 2), 8),
+                VAExpr (App Mul (App Add (Num 2) (Num 1)) (Num 3), 9),
+                VAExpr (App Mul (App Add (Num 2) (Num 3)) (Num 1), 5),
+                VAExpr (App Mul (App Add (Num 3) (Num 1)) (Num 2), 8),
+                VAExpr (App Mul (App Add (Num 3) (Num 2)) (Num 1), 5),
+                VAExpr (App Mul (App Sub (Num 2) (Num 1)) (Num 3), 3),
+                VAExpr (App Mul (App Sub (Num 3) (Num 1)) (Num 2), 4),
+                VAExpr (App Mul (App Sub (Num 3) (Num 2)) (Num 1), 1),
+                VAExpr (App Mul (App Mul (Num 1) (Num 2)) (Num 3), 6),
+                VAExpr (App Mul (App Mul (Num 1) (Num 3)) (Num 2), 6),
+                VAExpr (App Mul (App Mul (Num 2) (Num 1)) (Num 3), 6),
+                VAExpr (App Mul (App Mul (Num 2) (Num 3)) (Num 1), 6),
+                VAExpr (App Mul (App Mul (Num 3) (Num 1)) (Num 2), 6),
+                VAExpr (App Mul (App Mul (Num 3) (Num 2)) (Num 1), 6),
+                VAExpr (App Mul (App Div (Num 2) (Num 1)) (Num 3), 6),
+                VAExpr (App Mul (App Div (Num 3) (Num 1)) (Num 2), 6),
+                VAExpr (App Div (Num 1) (App Sub (Num 3) (Num 2)), 1),
+                VAExpr (App Div (Num 2) (App Sub (Num 3) (Num 1)), 1),
+                VAExpr (App Div (Num 3) (App Add (Num 1) (Num 2)), 1),
+                VAExpr (App Div (Num 3) (App Add (Num 2) (Num 1)), 1),
+                VAExpr (App Div (Num 3) (App Sub (Num 2) (Num 1)), 3),
+                VAExpr (App Div (App Add (Num 1) (Num 2)) (Num 3), 1),
+                VAExpr (App Div (App Add (Num 1) (Num 3)) (Num 2), 2),
+                VAExpr (App Div (App Add (Num 2) (Num 1)) (Num 3), 1),
+                VAExpr (App Div (App Add (Num 2) (Num 3)) (Num 1), 5),
+                VAExpr (App Div (App Add (Num 3) (Num 1)) (Num 2), 2),
+                VAExpr (App Div (App Add (Num 3) (Num 2)) (Num 1), 5),
+                VAExpr (App Div (App Sub (Num 3) (Num 1)) (Num 2), 1),
+                VAExpr (App Div (App Sub (Num 3) (Num 2)) (Num 1), 1),
+                VAExpr (App Div (App Mul (Num 2) (Num 3)) (Num 1), 6),
+                VAExpr (App Div (App Mul (Num 3) (Num 2)) (Num 1), 6)
+              ]
+    ]
 
 searchBestTests :: TestTree
-searchBestTests = undefined
+searchBestTests =
+  testGroup
+    "Tests for searchBest"
+    [ HU.testCase "searchBest 9 $ mkAExprs1 [1,2,3]" $
+        let VAExpr (e, v) = searchBest 9 (mkAExprs1 [1, 2, 3])
+         in v @?= 9,
+      HU.testCase "searchBest 3 $ mkAExprs1 [1,2,3]" $
+        let VAExpr (e, v) = searchBest 3 (mkAExprs1 [1, 2, 3])
+         in v @?= 3,
+      HU.testCase "searchBest 10 $ mkAExprs1 [1,2,3]" $
+        let VAExpr (e, v) = searchBest 10 (mkAExprs1 [1, 2, 3])
+         in v @?= 9
+    ]
 
 countdown1Tests :: TestTree
-countdown1Tests = undefined
-
-
+countdown1Tests =
+  testGroup
+    "Tests for countdown1"
+    [ HU.testCase "countdown1 463 [1,2,3,4,5,25]" $
+        let VAExpr (e, v) = countdown1 463 [1, 2, 3, 4, 5, 25]
+         in v @?= 463,
+      HU.testCase "countdown1 463 [1,4,7,8,9,9]" $
+        let VAExpr (e, v) = countdown1 463 [1, 4, 7, 8, 9, 9]
+         in v @?= 463,
+      HU.testCase "countdown1 463 [1,2,3,4,5,6]" $
+        let VAExpr (e, v) = countdown1 463 [1, 2, 3, 4, 5, 6]
+         in v @?= 462
+    ]
