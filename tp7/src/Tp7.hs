@@ -45,13 +45,18 @@ value = undefined
 
 -- Exercice 2 -- Un premier solveur
 
-merge = undefined
+merge :: (Ord a) => [a] -> [a] -> [a]
+merge xs [] = xs
+merge [] ys = ys
+merge xs@(x : xs') ys@(y : ys')
+  | x <= y = x : merge xs' ys
+  | otherwise = y : merge xs ys'
 
 unmerges1 = undefined
 
 combineVAExprs1 = undefined
 
-mkAExpres1 = undefined
+mkAExprs1 = undefined
 
 searchBest = undefined
 
@@ -62,12 +67,21 @@ countdown1 = undefined
 
 legal2 = undefined
 
-combineVAExprs2 :: VAExpr -> VAExpr -> [VAExpr]
-combineVAExprs2 (VAExpr (e1,v1)) (VAExpr (e2,v2))
-    | v1 < v2 = combineVAExprsUnbalance2 (VAExpr (e1,v1)) (VAExpr (e2,v2))
-    | v1 == v2 = combineVAExprsBalance2 (VAExpr (e1,v1)) (VAExpr (e2,v2))
-    | otherwise = combineVAExprsUnbalance2 (VAExpr (e2,v2)) (VAExpr (e1,v1))
+unmerges2 = undefined
 
-combineVAExprsBalance2 = undefined
+combineVAExprs2 = undefined
 
-combineVAExprsUnbalance2 = undefined
+countdown2 = undefined
+
+
+-- Exercice 4 -- Pour aller plus loin
+
+countDownAll = undefined
+
+sizedSublists = undefined
+
+sublistsShortestFirst = undefined
+
+sublistsLongestFirst = undefined
+
+countdownTrace = undefined
