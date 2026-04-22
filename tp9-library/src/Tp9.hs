@@ -171,8 +171,6 @@ lookupISBN = undefined
 
 titles = undefined
 
-brList = undefined
-
 countShelvedBooks = undefined
 
 countBorrowedBooks = undefined
