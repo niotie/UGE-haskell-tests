@@ -167,8 +167,6 @@ myEScenario =
 
 -- Exercice 1
 
-bookAndCounts = undefined
-
 lookupISBN = undefined
 
 titles = undefined
