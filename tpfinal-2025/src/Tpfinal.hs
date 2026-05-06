@@ -7,6 +7,9 @@ import qualified Data.Set as S
 
 -- Exercice 1 : Listes
 
+endWith :: (Eq a) => [a] -> [a] -> Bool
+endWith = undefined
+
 countPeaks :: (Ord a) => [a] -> Int
 countPeaks = undefined
 
@@ -117,9 +120,6 @@ consRLES = undefined
 toRLES :: String -> RLES
 toRLES = undefined
 
-lengthRLES :: RLES -> Int
-lengthRLES = undefined
-
 headRLES :: RLES -> Maybe Char
 headRLES = undefined
 
@@ -151,8 +151,8 @@ foldrRLES :: (RLER -> a -> a) -> a -> RLES -> a
 foldrRLES f acc Nil = acc
 foldrRLES f acc (Cons rler rlel) = f rler (foldrRLES f acc rlel)
 
-countRLES :: Char -> RLES -> Int
-countRLES = undefined
+lengthRLES :: RLES -> Int
+lengthRLES = undefined
 
 mapRLES' :: (Char -> Char) -> RLES -> RLES
 mapRLES' = undefined
